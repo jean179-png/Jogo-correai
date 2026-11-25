@@ -152,13 +152,24 @@ export class Game {
     }
     if (--this.spawnTimer <= 0) {
       // Rodízio de obstáculos: mistura cenários e evita repetir sempre cone/caixa.
-      const types = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet'];
+      const common = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet'];
+      // Obstáculos especiais acompanham o tema/ambiente atual da fase.
+      const themed = [
+        ['car','server','drone'],          // Tecnologia
+        ['cabinet','officebox','chair'],   // Administração
+        ['battery','circuit','coil'],      // Eletrônica
+        ['hacker','computer','cable'],     // Informática
+        ['router','antenna','hacker'],     // TI e Redes
+        ['pc_case','motherboard','fan'],   // Hardware
+        ['labcart','microscope','cabinet'] // Laboratório
+      ][this.environmentIndex()];
+      const types = [...common, ...themed];
       const last = this.lastObstacleType;
       let pool = types.filter(t => t !== last);
       const type = pool[Math.floor(Math.random() * pool.length)];
       this.lastObstacleType = type;
-      const widths = {pit:125,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82};
-      const damage = type === 'pit' || type === 'gate' || type === 'barrier' ? 2 : 1;
+      const widths = {pit:125,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68};
+      const damage = type === 'pit' || type === 'gate' || type === 'barrier' || type === 'car' ? 2 : 1;
       this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
       this.spawnTimer = 76 + Math.random() * 62;
     }
@@ -693,6 +704,62 @@ export class Game {
         c.fillStyle='#d49a5b';for(let k=0;k<4;k++)c.fillRect(3+k*20,-35,16,31);
         c.fillStyle='#6e4528';c.fillRect(0,-9,82,9);c.fillRect(9,-9,9,9);c.fillRect(64,-9,9,9);
         c.strokeStyle='#6e4528';c.lineWidth=3;c.strokeRect(0,-38,82,38);c.restore();
+      }
+      else if(o.type==='car'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#17243a';c.fillRect(8,-38,130,31);
+        c.fillStyle='#f47721';c.fillRect(0,-34,145,27);
+        c.fillStyle='#ffd34d';c.fillRect(22,-51,83,19);
+        c.fillStyle='#9edfff';c.fillRect(29,-48,31,14);c.fillRect(66,-48,31,14);
+        c.fillStyle='#17243a';c.beginPath();c.arc(34,-7,13,0,Math.PI*2);c.arc(113,-7,13,0,Math.PI*2);c.fill();
+        c.fillStyle='#b8c8d8';c.beginPath();c.arc(34,-7,6,0,Math.PI*2);c.arc(113,-7,6,0,Math.PI*2);c.fill();c.restore();
+      }
+      else if(o.type==='hacker'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#101827';c.fillRect(9,-73,54,70);c.fillRect(3,-63,66,38);
+        c.fillStyle='#263b62';c.fillRect(14,-69,44,31);
+        c.fillStyle='#43e6bb';c.fillRect(20,-57,8,5);c.fillRect(42,-57,8,5);
+        c.fillStyle='#f47721';c.fillRect(21,-43,31,6);
+        c.fillStyle='#17243a';c.fillRect(12,-12,19,12);c.fillRect(43,-12,19,12);
+        c.fillStyle='#43e6bb';c.font='bold 12px monospace';c.fillText('0101',12,-80);c.restore();
+      }
+      else if(o.type==='cabinet'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#8797aa';c.fillRect(0,-91,76,91);
+        c.fillStyle='#cbd8e6';c.fillRect(6,-85,64,79);
+        c.strokeStyle='#10265b';c.lineWidth=4;c.strokeRect(0,-91,76,91);
+        c.fillStyle='#1676c5';c.fillRect(9,-81,58,3);c.fillRect(9,-43,58,3);
+        c.fillStyle='#f47721';c.fillRect(56,-72,5,7);c.fillRect(56,-33,5,7);c.restore();
+      }
+      else if(o.type==='officebox'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#b8c8d8';c.fillRect(0,-48,62,48);c.fillStyle='#8797aa';c.fillRect(7,-42,48,34);c.fillStyle='#f47721';c.fillRect(12,-33,38,5);c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(0,-48,62,48);c.restore();
+      }
+      else if(o.type==='server'||o.type==='router'||o.type==='computer'||o.type==='pc_case'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#263b62';c.fillRect(0,-82,o.w,82);c.fillStyle='#10265b';c.fillRect(6,-76,o.w-12,70);
+        for(let y=-67;y<-17;y+=17){c.fillStyle='#8bb9df';c.fillRect(12,y,o.w-24,4);c.fillStyle='#43e6bb';c.fillRect(o.w-19,y-3,5,5);}
+        c.fillStyle='#f47721';c.fillRect(8,-8,o.w-16,4);c.strokeStyle='#0b1934';c.lineWidth=3;c.strokeRect(0,-82,o.w,82);c.restore();
+      }
+      else if(o.type==='battery'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#ffd34d';c.fillRect(8,-55,44,55);c.fillRect(22,-61,16,7);c.fillStyle='#10265b';c.fillRect(27,-45,7,18);c.fillRect(21,-39,19,7);c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(8,-55,44,55);c.restore();
+      }
+      else if(o.type==='circuit'||o.type==='motherboard'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#16765a';c.fillRect(0,-56,o.w,56);c.strokeStyle='#ffd34d';c.lineWidth=3;
+        for(let k=0;k<4;k++){c.beginPath();c.moveTo(8,-45+k*12);c.lineTo(28,-45+k*12);c.lineTo(28,-25);c.stroke();}
+        c.fillStyle='#263b62';c.fillRect(o.w/2-12,-42,24,24);c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(0,-56,o.w,56);c.restore();
+      }
+      else if(o.type==='coil'||o.type==='fan'){
+        c.save();c.translate(o.x+31,this.ground-31);c.strokeStyle='#1676c5';c.lineWidth=7;c.beginPath();c.arc(0,0,25,0,Math.PI*2);c.stroke();c.fillStyle='#8797aa';c.beginPath();c.arc(0,0,8,0,Math.PI*2);c.fill();
+        for(let k=0;k<4;k++){c.save();c.rotate(k*Math.PI/2);c.fillStyle='#b8c8d8';c.fillRect(-4,-24,8,19);c.restore();}c.restore();
+      }
+      else if(o.type==='drone'){
+        c.save();c.translate(o.x,this.ground-50);c.fillStyle='#263b62';c.fillRect(13,-8,40,16);c.fillStyle='#56b9ed';c.fillRect(23,-4,20,8);
+        c.strokeStyle='#10265b';c.lineWidth=4;c.beginPath();c.moveTo(18,0);c.lineTo(0,-15);c.moveTo(48,0);c.lineTo(66,-15);c.stroke();c.fillStyle='#f47721';c.fillRect(-7,-20,22,5);c.fillRect(50,-20,22,5);c.restore();
+      }
+      else if(o.type==='antenna'){
+        c.save();c.translate(o.x,this.ground);c.strokeStyle='#8797aa';c.lineWidth=6;c.beginPath();c.moveTo(35,0);c.lineTo(35,-82);c.stroke();c.beginPath();c.arc(35,-82,24,-1.1,1.1);c.stroke();c.beginPath();c.arc(35,-82,14,-1.1,1.1);c.stroke();c.fillStyle='#f47721';c.fillRect(29,-5,13,5);c.restore();
+      }
+      else if(o.type==='labcart'||o.type==='microscope'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#8797aa';c.fillRect(4,-38,86,7);c.fillRect(12,-31,6,25);c.fillRect(77,-31,6,25);c.fillStyle='#56b9ed';c.fillRect(12,-57,24,18);c.fillStyle='#f47721';c.fillRect(48,-56,25,18);c.fillStyle='#17243a';c.beginPath();c.arc(20,-3,7,0,Math.PI*2);c.arc(76,-3,7,0,Math.PI*2);c.fill();c.restore();
       }
       else {c.fillStyle='#a96c35';c.fillRect(o.x,this.ground-58,58,58);c.strokeStyle='#f0c17d';c.lineWidth=4;c.strokeRect(o.x+5,this.ground-53,48,48);}
     }
