@@ -89,7 +89,7 @@ export const CHARACTER_SPRITES = {
   }
 };
 
-for (const id of ['A02','A03','A04','A05','A06']) {
+for (const id of ['A02','A03','A04','A05','A06','A07','A08','A09','A10']) {
   CHARACTER_SPRITES[id] = { ...CHARACTER_SPRITES.A01, src: './assets/personagens/spritesheet-' + id + '.svg' };
 }
 
