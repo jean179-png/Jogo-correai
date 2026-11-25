@@ -201,7 +201,15 @@ function activateStart(event) {
     overlay.style.display = 'grid';
   }
 }
-startButton.addEventListener('click', activateStart);
+startButton.type = 'button';
+startButton.style.touchAction = 'manipulation';
+startButton.addEventListener('pointerup', (event) => {
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  activateStart(event);
+}, { passive: false });
+startButton.addEventListener('click', (event) => {
+  if (event.detail === 0) activateStart(event);
+});
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
