@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=34">
+  <link rel="stylesheet" href="./style.css?v=35">
 
 </head>
 <body>
@@ -23,7 +23,7 @@
 
     <section id="overlay" class="overlay menu-overlay" aria-label="Menu inicial Onda de Aprendizes">
       <div class="menu-art" id="menu-art">
-        <img class="menu-background" src="./assets/cenarios/campus-senaipixel.svg" alt="" aria-hidden="true">
+        <img id="menu-background" class="menu-background" src="./assets/cenarios/campus-senaipixel.svg" alt="" aria-hidden="true">
         <div class="menu-shade" aria-hidden="true"></div>
         <div class="menu-profile-card">
           <div class="menu-avatar">A</div>
@@ -106,6 +106,27 @@ window.addEventListener('unhandledrejection', function(e) {
 });
 </script>
 
-<script src="./src/bundle.js?v=38" defer></script>
+<script>
+(async function(){
+  const paths = [
+    './assets/menu-bg-01.b64','./assets/menu-bg-02.b64','./assets/menu-bg-03.b64',
+    './assets/menu-bg-04.b64','./assets/menu-bg-05.b64','./assets/menu-bg-06.b64','./assets/menu-bg-07.b64'
+  ];
+  const image = document.getElementById('menu-background');
+  try {
+    const chunks = await Promise.all(paths.map(async path => {
+      const response = await fetch(path, { cache: 'force-cache' });
+      if (!response.ok) throw new Error('Não foi possível carregar ' + path);
+      return (await response.text()).trim();
+    }));
+    const highResolution = 'data:image/webp;base64,' + chunks.join('');
+    image.onerror = () => { console.warn('Arte HD indisponível; usando cenário SVG de reserva.'); image.src = './assets/cenarios/campus-senaipixel.svg'; };
+    image.src = highResolution;
+  } catch (error) {
+    console.warn('Falha ao montar a arte HD do menu:', error);
+  }
+})();
+</script>
+<script src="./src/bundle.js?v=39" defer></script>
 </body>
 </html>
