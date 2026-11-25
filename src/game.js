@@ -1,6 +1,8 @@
+import { createCharacterSprite } from './sprite-animation.js';
 export class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
+    this.leaderSprite = createCharacterSprite('A01');
     this.ctx = canvas.getContext('2d');
     this.callbacks = callbacks;
     this.width = 1280; this.height = 720; this.ground = 555;
@@ -38,6 +40,8 @@ export class Game {
   }
   update(dt) {
     this.frame += dt;
+    this.leaderSprite?.update(dt);
+    if (this.leaderSprite) this.leaderSprite.setAnimation(this.isJumping ? (this.velocityY < 0 ? 'jump' : 'fall') : 'run');
     this.cameraShake = Math.max(0, this.cameraShake - 0.85 * dt);
     this.cameraX += ((this.speed - 6) * 0.7 - this.cameraX) * 0.035 * dt;
     this.landingPulse = Math.max(0, this.landingPulse - dt);
@@ -498,6 +502,7 @@ export class Game {
 
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
+    if (leader && this.leaderSprite?.draw(c, x - 44 * scale, y - 88 * scale, { scale })) return;
     c.save();
     c.translate(Math.round(x), Math.round(y));
     c.scale(scale, scale);
