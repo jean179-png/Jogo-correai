@@ -7,7 +7,7 @@ export class Game {
     this.running = false; this.paused = false;
     this.distance = 0; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
-    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 360; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 110; this.coinTimer = 75; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = 650; this.bossCount = 0;
+    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 360; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 110; this.coinTimer = 75; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = 650; this.bossCount = 0; this.difficultyLevel = 0;
     this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0;
     this.loop = this.loop.bind(this);
     this.draw();
@@ -15,7 +15,7 @@ export class Game {
   start(startEnvironment = 0) {
     this.distance = Math.max(0, Number(startEnvironment) || 0) * 220; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
-    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0;
+    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0; this.difficultyLevel = 0;
     this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.obstacleAwareness = 0;
     requestAnimationFrame(this.loop);
   }
@@ -54,6 +54,11 @@ export class Game {
     const baseSpeed = Math.min(9, 6 + this.distance / 700);
     this.speed = Math.min(12, baseSpeed * (turboOn ? 1.55 : 1));
     this.distance += this.speed * .045 * dt;
+    const nextDifficulty = Math.min(5, Math.floor(this.distance / 500));
+    if (nextDifficulty !== this.difficultyLevel) {
+      this.difficultyLevel = nextDifficulty;
+      this.callbacks.onDifficulty?.(this.difficultyLevel, this.distance);
+    }
     if (this.distance >= this.nextForkDistance) {
       this.routeForks.push({ x: 1320, chosen: false, pulse: 0 });
       this.nextForkDistance += 420 + Math.random() * 100;
@@ -68,8 +73,9 @@ export class Game {
     // Chefe de setor: surge periodicamente como desafio especial.
     if (this.distance >= this.nextBossDistance && !this.obstacles.some(o => o.type === 'boss')) {
       this.bossCount++;
-      this.obstacles.push({ x: 1320, type: 'boss', damage: 5, w: 150, passed: false, boss: this.bossCount });
-      this.nextBossDistance += 650;
+      const bossDamage = Math.min(7, 5 + Math.floor((this.bossCount - 1) / 3));
+      this.obstacles.push({ x: 1320, type: 'boss', damage: bossDamage, w: 150, passed: false, boss: this.bossCount });
+      this.nextBossDistance += Math.max(500, 650 - this.difficultyLevel * 25);
       this.callbacks.onBoss?.(this.bossCount);
     }
     if (--this.spawnTimer <= 0) {
@@ -97,7 +103,8 @@ export class Game {
       const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68,printer:72,books:66,wetfloor:58,robotarm:92,ups:74};
       const damage = type === 'pit' || type === 'gate' || type === 'barrier' || type === 'car' ? 2 : 1;
       this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
-      this.spawnTimer = 105 + Math.random() * 70;
+      const spawnReduction = this.difficultyLevel * 6;
+      this.spawnTimer = Math.max(72, 105 - spawnReduction) + Math.random() * Math.max(24, 70 - spawnReduction);
     }
     if (--this.recruitTimer <= 0) {
       // Pequenos grupos de aprendizes surgem juntos, no estilo de horda do runner.
