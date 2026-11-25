@@ -7,7 +7,7 @@ export class Game {
     this.running = false; this.paused = false;
     this.distance = 0; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
-    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 360; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 110; this.coinTimer = 75; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = 650; this.bossCount = 0;
+    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 360; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 110; this.coinTimer = 75; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = 650; this.bossCount = 0;
     this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0;
     this.loop = this.loop.bind(this);
     this.draw();
@@ -15,7 +15,7 @@ export class Game {
   start(startEnvironment = 0) {
     this.distance = Math.max(0, Number(startEnvironment) || 0) * 220; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
-    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0;
+    this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0;
     this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.obstacleAwareness = 0;
     requestAnimationFrame(this.loop);
   }
@@ -120,13 +120,29 @@ export class Game {
       }
     }
     for (const r of this.recruits) r.x -= this.speed * dt;
+    this.coinComboTimer = Math.max(0, this.coinComboTimer - dt);
+    if (this.coinComboTimer === 0) this.coinCombo = 0;
     for (const coin of this.coins) {
       coin.x -= this.speed*dt; coin.spin += .18*dt;
       if (this.effects.magnet > 0 && coin.x < 620) {
         coin.y += (this.playerY - 105 - coin.y) * .075 * dt;
         coin.x += (195 - coin.x) * .035 * dt;
       }
-      if (!coin.got && coin.x < 220 && coin.x > 145 && Math.abs(coin.y-(this.playerY-35)) < 115) { coin.got=true; this.score += 25; this.burst(coin.x,coin.y,'#ffd34d',9); this.callbacks.onSound?.("coin"); } }
+      if (!coin.got && coin.x < 220 && coin.x > 145 && Math.abs(coin.y-(this.playerY-35)) < 115) {
+        coin.got = true;
+        this.coinCombo = Math.min(10, this.coinCombo + 1);
+        this.coinComboTimer = 105;
+        const bonus = 25 + Math.max(0, this.coinCombo - 1) * 5;
+        const multiplier = this.effects.multiplier > 0 ? 2 : 1;
+        this.score += bonus * multiplier;
+        this.burst(coin.x,coin.y,'#ffd34d',9 + Math.min(12,this.coinCombo));
+        if (this.coinCombo === 5 || this.coinCombo === 10) {
+          this.score += 100 * multiplier;
+          this.burst(190, this.playerY - 90, '#43e6bb', 24);
+        }
+        this.callbacks.onSound?.("coin");
+      }
+    }
     this.coins = this.coins.filter(coin => !coin.got && coin.x > -40);
     for (const p of this.particles) { p.x += p.vx*dt; p.y += p.vy*dt; p.vy += .22*dt; p.life -= dt; }
     this.particles = this.particles.filter(p => p.life > 0);
