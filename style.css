@@ -377,7 +377,7 @@ body{min-height:100svh;min-height:100dvh}
 
 /* Menu final — imagem de referência como composição visual integral */
 .menu-overlay{
-  display:grid!important;place-items:center!important;inset:0!important;
+  display:grid;place-items:center!important;inset:0!important;
   padding:0!important;overflow:hidden!important;background:#061d4d!important;
 }
 .menu-overlay .menu-art{
@@ -582,7 +582,7 @@ body{min-height:100svh;min-height:100dvh}
 
 /* MENU PRINCIPAL PIXEL ART HD — interface real, botões independentes e personagens animados */
 .menu-overlay{
-  display:grid!important;place-items:center!important;inset:0!important;padding:0!important;
+  display:grid;place-items:center!important;inset:0!important;padding:0!important;
   overflow:hidden!important;background:#061b49!important;
 }
 .menu-overlay .menu-art{
