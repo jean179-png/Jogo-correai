@@ -480,10 +480,11 @@ export class Game {
     c.scale(scale, scale);
 
     // Personagens em pixel art: vista lateral, mochila, uniforme e silhueta legível.
-    const variant = Math.abs(Math.floor(phase * 17)) % 8;
-    const skin = ['#f0bd91','#c9875d','#9b6045','#e5a77d','#754833','#f2c9a4','#b97855','#d99a70'][variant];
-    const hair = ['#202638','#35251f','#111827','#6b452e','#171717','#8b5b35','#252525','#493126'][variant];
-    const shirt = leader ? '#f47721' : (variant % 3 === 0 ? '#f8fbff' : '#e9f3ff');
+    const variant = Math.abs(Math.floor(phase * 17)) % 10;
+    // Elenco A01–A10: diversidade de tons de pele, cabelos e acessórios.
+    const skin = ['#f0bd91','#c9875d','#9b6045','#e5a77d','#754833','#f2c9a4','#b97855','#d99a70','#633d2d','#e8b58d'][variant];
+    const hair = ['#202638','#35251f','#111827','#6b452e','#171717','#8b5b35','#252525','#493126','#b84f2f','#d5b36a'][variant];
+    const shirt = '#f47721';
     const trim = leader ? '#10265b' : '#1676c5';
     const cycle = this.frame * 0.255 + phase;
     const run = !this.isJumping;
@@ -580,6 +581,21 @@ export class Game {
     } else {
       c.fillRect(-7, -87, 10, 4);
       c.fillRect(4, -82, 7, 4);
+    }
+    // Silhuetas exclusivas para diferenciar os dez aprendizes.
+    if (variant === 1 || variant === 6) { // cabelo cacheado
+      for (const [hx,hy] of [[-9,-89],[-3,-92],[4,-91],[10,-87]]) {
+        c.fillStyle=hair; c.fillRect(hx,hy,6,6);
+      }
+    } else if (variant === 3 || variant === 8) { // cabelo comprido / ruivo
+      c.fillStyle=hair; c.fillRect(-11,-78,5,17); c.fillRect(8,-79,6,19);
+    } else if (variant === 5 || variant === 9) { // rabo de cavalo / cabelo claro
+      c.fillStyle=hair; c.fillRect(-14,-80,6,12); c.fillRect(-17,-73,5,10);
+    }
+    if (variant === 2 || variant === 7) { // óculos
+      c.strokeStyle='#17243a'; c.lineWidth=2;
+      c.strokeRect(4,-75,7,6); c.strokeRect(12,-75,5,6);
+      c.beginPath(); c.moveTo(11,-72); c.lineTo(12,-72); c.stroke();
     }
     // Olho, sobrancelha e sorriso em poucos pixels.
     c.fillStyle = '#17243a';
