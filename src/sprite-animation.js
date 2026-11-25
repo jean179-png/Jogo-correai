@@ -73,15 +73,16 @@ export class SpriteAnimator {
  */
 export const CHARACTER_SPRITES = {
   A01: {
-    src: '../assets/personagens/spritesheet-A01.png',
+    src: './assets/personagens/spritesheet-A01.svg',
     frameWidth: 96,
     frameHeight: 96,
     scale: 1,
     animations: {
       run:   { frames: [0, 1, 2, 3, 4, 5], columns: 6, frameDuration: 5 },
       jump:  { frames: [6, 7, 8, 9], columns: 6, frameDuration: 7 },
-      fall:  { frames: [10, 11, 12, 13], columns: 6, frameDuration: 7 },
-      cheer: { frames: [14, 15, 16, 17], columns: 6, frameDuration: 9 }
+      fall:  { frames: [10, 11], columns: 6, frameDuration: 7 },
+      idle:  { frames: [12, 13], columns: 6, frameDuration: 12 },
+      cheer: { frames: [14, 15], columns: 6, frameDuration: 9 }
     }
   }
 };
