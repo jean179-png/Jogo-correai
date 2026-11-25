@@ -545,7 +545,7 @@ export class Game {
     const run = !this.isJumping;
     const legSwing = run ? Math.round(Math.sin(cycle) * 10) : 0;
     const armSwing = run ? Math.round(Math.sin(cycle + Math.PI) * 7) : 0;
-    const bob = run ? Math.round(Math.abs(Math.sin(cycle)) * 2) : -5;
+    const bobOffset = run ? Math.round(Math.abs(Math.sin(cycle)) * 2) : -5;
     const stagger = reaction > 0 ? Math.max(0, 1 - reaction / 28) : 0;
     const dodge = Math.max(0, Math.min(1, avoidance));
 
@@ -553,7 +553,7 @@ export class Game {
     c.fillStyle = '#07152b';
     c.fillRect(-17, -1, 35, 5);
     c.globalAlpha = 1;
-    c.translate(Math.round(-dodge * 3 + stagger * Math.sin(phase * 2) * 3), bob);
+    c.translate(Math.round(-dodge * 3 + stagger * Math.sin(phase * 2) * 3), bobOffset);
 
     // Pernas articuladas em blocos, com tênis contrastantes.
     const drawLeg = (x0, swing, front) => {
