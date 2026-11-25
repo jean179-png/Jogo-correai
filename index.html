@@ -151,11 +151,16 @@ export class Game {
       this.callbacks.onBoss?.(this.bossCount);
     }
     if (--this.spawnTimer <= 0) {
-      const roll = Math.random();
-      const type = roll < .22 ? 'pit' : roll < .68 ? 'crate' : 'barrier';
-      const damage = type === 'barrier' ? 3 : type === 'pit' ? 2 : 1;
-      this.obstacles.push({ x: 1320, type, damage, w: type === 'pit' ? 125 : type === 'barrier' ? 88 : 58, passed: false });
-      this.spawnTimer = 72 + Math.random() * 58;
+      // Rodízio de obstáculos: mistura cenários e evita repetir sempre cone/caixa.
+      const types = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet'];
+      const last = this.lastObstacleType;
+      let pool = types.filter(t => t !== last);
+      const type = pool[Math.floor(Math.random() * pool.length)];
+      this.lastObstacleType = type;
+      const widths = {pit:125,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82};
+      const damage = type === 'pit' || type === 'gate' || type === 'barrier' ? 2 : 1;
+      this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
+      this.spawnTimer = 76 + Math.random() * 62;
     }
     if (--this.recruitTimer <= 0) {
       // Pequenos grupos de aprendizes surgem juntos, no estilo de horda do runner.
@@ -615,9 +620,81 @@ export class Game {
         c.fillStyle='#fff'; c.font='bold 16px Arial'; c.textAlign='center'; c.fillText('CHEFE',75,-145);
         c.restore();
       }
-      else       if(o.type==='pit'){c.fillStyle='#111d31';c.fillRect(o.x,this.ground,o.w,165);c.fillStyle='#7d91a3';c.fillRect(o.x,this.ground,o.w,8);}
-      else if(o.type==='barrier'){c.fillStyle='#d94c35';c.fillRect(o.x,this.ground-92,o.w,92);c.fillStyle='#ffd34d';for(let k=0;k<4;k++){c.save();c.translate(o.x+8+k*22,this.ground-82);c.rotate(-.55);c.fillRect(0,0,10,75);c.restore();}c.fillStyle='#fff';c.font='bold 15px Arial';c.fillText('3',o.x+o.w/2-4,this.ground-100);}
-      else{c.fillStyle='#a96c35';c.fillRect(o.x,this.ground-58,58,58);c.strokeStyle='#f0c17d';c.lineWidth=4;c.strokeRect(o.x+5,this.ground-53,48,48);}
+      else if(o.type==='pit'){
+        c.fillStyle='#111d31';c.fillRect(o.x,this.ground,o.w,165);
+        c.fillStyle='#7d91a3';c.fillRect(o.x,this.ground,o.w,8);
+        c.fillStyle='#263b62';c.fillRect(o.x+8,this.ground+12,o.w-16,8);
+      }
+      else if(o.type==='barrier'){
+        c.fillStyle='#d94c35';c.fillRect(o.x,this.ground-92,o.w,92);
+        c.fillStyle='#ffd34d';for(let k=0;k<4;k++){c.save();c.translate(o.x+8+k*22,this.ground-82);c.rotate(-.55);c.fillRect(0,0,10,75);c.restore();}
+        c.fillStyle='#fff';c.font='bold 15px Arial';c.fillText('ATENÇÃO',o.x-3,this.ground-100);
+      }
+      else if(o.type==='cone'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#263b62';c.fillRect(0,-7,48,7);
+        c.fillStyle='#f47721';c.beginPath();c.moveTo(23,-61);c.lineTo(5,-7);c.lineTo(42,-7);c.closePath();c.fill();
+        c.fillStyle='#fff';c.fillRect(13,-32,23,7);c.fillRect(8,-17,32,6);c.restore();
+      }
+      else if(o.type==='chair'){
+        c.save();c.translate(o.x,this.ground);c.fillStyle='#263b62';
+        c.fillRect(7,-61,48,7);c.fillRect(7,-61,7,34);c.fillRect(48,-61,7,34);
+        c.fillStyle='#f47721';c.fillRect(7,-29,48,7);c.fillRect(11,-22,5,22);c.fillRect(46,-22,5,22);
+        c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(7,-61,48,39);c.restore();
+      }
+      else if(o.type==='gate'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#8797aa';c.fillRect(0,-104,13,104);c.fillRect(79,-104,13,104);
+        c.fillStyle='#1676c5';c.fillRect(10,-96,72,82);
+        c.strokeStyle='#10265b';c.lineWidth=4;c.strokeRect(10,-96,72,82);
+        c.fillStyle='#f7fbff';for(let k=0;k<5;k++)c.fillRect(19+k*13,-91,5,72);
+        c.fillStyle='#ffd34d';c.fillRect(10,-57,72,9);
+        c.fillStyle='#10265b';c.fillRect(-4,-108,20,8);c.fillRect(76,-108,20,8);c.restore();
+      }
+      else if(o.type==='toolbox'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#d94c35';c.fillRect(4,-45,60,45);
+        c.fillStyle='#f47721';c.fillRect(12,-54,44,10);
+        c.fillStyle='#10265b';c.fillRect(27,-59,15,8);
+        c.fillStyle='#ffd34d';c.fillRect(28,-32,13,10);
+        c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(4,-45,60,45);c.restore();
+      }
+      else if(o.type==='tire'){
+        c.save();c.translate(o.x+29,this.ground-25);
+        c.fillStyle='#17243a';c.beginPath();c.arc(0,0,26,0,Math.PI*2);c.fill();
+        c.fillStyle='#8290a1';c.beginPath();c.arc(0,0,12,0,Math.PI*2);c.fill();
+        c.fillStyle='#263b62';c.beginPath();c.arc(0,0,6,0,Math.PI*2);c.fill();
+        c.strokeStyle='#0b1428';c.lineWidth=4;c.beginPath();c.arc(0,0,20,0,Math.PI*2);c.stroke();c.restore();
+      }
+      else if(o.type==='sign'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#8797aa';c.fillRect(24,-62,7,62);
+        c.fillStyle='#ffd34d';c.fillRect(0,-91,54,34);
+        c.fillStyle='#10265b';c.lineWidth=3;c.strokeStyle='#10265b';c.strokeRect(0,-91,54,34);
+        c.font='bold 22px Arial';c.textAlign='center';c.fillText('!',27,-67);
+        c.fillStyle='#f47721';c.fillRect(17,-7,22,7);c.restore();
+      }
+      else if(o.type==='cable'){
+        c.save();c.translate(o.x,this.ground);
+        c.strokeStyle='#17243a';c.lineWidth=9;c.beginPath();c.moveTo(0,-5);c.bezierCurveTo(20,-48,78,-48,104,-5);c.stroke();
+        c.strokeStyle='#f47721';c.lineWidth=3;c.beginPath();c.moveTo(0,-5);c.bezierCurveTo(20,-48,78,-48,104,-5);c.stroke();
+        c.fillStyle='#8797aa';c.fillRect(-3,-10,12,12);c.fillRect(96,-10,12,12);c.restore();
+      }
+      else if(o.type==='monitor'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#263b62';c.fillRect(2,-57,62,43);
+        c.fillStyle='#56b9ed';c.fillRect(8,-51,50,31);
+        c.fillStyle='#10265b';c.fillRect(27,-14,12,8);c.fillRect(18,-6,31,6);
+        c.fillStyle='#f47721';c.fillRect(14,-42,12,4);c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(2,-57,62,43);c.restore();
+      }
+      else if(o.type==='pallet'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#a96c35';c.fillRect(0,-38,82,38);
+        c.fillStyle='#d49a5b';for(let k=0;k<4;k++)c.fillRect(3+k*20,-35,16,31);
+        c.fillStyle='#6e4528';c.fillRect(0,-9,82,9);c.fillRect(9,-9,9,9);c.fillRect(64,-9,9,9);
+        c.strokeStyle='#6e4528';c.lineWidth=3;c.strokeRect(0,-38,82,38);c.restore();
+      }
+      else {c.fillStyle='#a96c35';c.fillRect(o.x,this.ground-58,58,58);c.strokeStyle='#f0c17d';c.lineWidth=4;c.strokeRect(o.x+5,this.ground-53,48,48);}
     }
     // Portão de desafio pedagógico
     for(const g of this.gates){ c.fillStyle='#10265b'; c.fillRect(g.x,this.ground-175,22,175); c.fillRect(g.x+112,this.ground-175,22,175); c.fillStyle='#f47721'; c.fillRect(g.x-8,this.ground-184,150,18); c.fillStyle='#fff'; c.font='bold 19px Arial'; c.textAlign='center'; c.fillText('DESAFIO',g.x+63,this.ground-145); c.fillStyle='#ffd34d'; c.font='bold 15px Arial'; c.fillText('SENAI',g.x+63,this.ground-120); }
