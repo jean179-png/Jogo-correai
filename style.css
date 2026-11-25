@@ -371,3 +371,5 @@ body{min-height:100svh;min-height:100dvh}
   .menu-bottom b,.menu-bottom span{font-size:10px}
   .menu-overlay #message{bottom:2px;max-width:calc(100% - 110px)}
 }
+
+@media(max-aspect-ratio:1/1){.menu-bottom{display:none!important}.sector-board{top:69%;bottom:2%;overflow:hidden}.sector-board div{width:49%;}}
