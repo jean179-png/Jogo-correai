@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=31">
+  <link rel="stylesheet" href="./style.css?v=32">
 
 </head>
 <body>
@@ -21,44 +21,24 @@
 
     <canvas id="game" width="1280" height="720" aria-label="Jogo Onda de Aprendizes"></canvas>
 
-    <section id="overlay" class="overlay menu-overlay">
-      <div class="menu-art" aria-hidden="true"></div>
-      <div class="menu-profile"><span class="profile-avatar">A</span><span><b>ÁREA DO APRENDIZ</b><small>JOGO EDUCATIVO SENAI</small></span></div>
-      <div class="menu-topnote"><span>✦</span> APRENDA JOGANDO <span>✦</span></div>
-
-      <div class="menu-title">
-        <h1>ONDA DE <strong>APRENDIZES</strong></h1>
-        <span class="menu-title-brand">SENAI</span>
+    <section id="overlay" class="overlay menu-overlay" aria-label="Menu inicial Onda de Aprendizes">
+      <div class="menu-art">
+        <img id="menu-reference-image" class="menu-reference-image" alt="Menu Onda de Aprendizes no campus SENAI">
       </div>
-
-      <div class="menu-center">
-        <button id="start" class="primary menu-start" type="button" onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}"><span>▶</span> COMEÇAR</button>
-        <div class="menu-shortcuts" aria-label="Recursos do jogo">
-          <div class="menu-shortcut"><span>▣</span><b>MISSÕES</b><small>DESAFIOS DE INFORMÁTICA</small></div>
-          <div class="menu-shortcut"><span>🏆</span><b>CONQUISTAS</b><small id="achievement-summary"> <span id="achievement-count">0</span> / 7 DESBLOQUEADAS</small></div>
-          <div class="menu-shortcut"><span>▥</span><b>RANKING</b><small>RECORDE LOCAL: <span id="best-score">0</span></small></div>
-        </div>
-        <div class="menu-tools">
-          <div class="menu-options"><label for="environment-select">ESCOLHA O SETOR INICIAL</label><select id="environment-select"><option value="0">Fase 1 — Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option><option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option></select></div>
-          <button id="sound-toggle" class="secondary menu-sound">🔊 SOM: LIGADO</button>
-        </div>
-        <p class="menu-controls">COMPUTADOR: ESPAÇO / ↑ PARA PULAR&nbsp;&nbsp; • &nbsp;&nbsp;CELULAR: TOQUE NA TELA</p>
+      <button id="start" class="menu-start-hit" type="button" aria-label="Começar o jogo"
+        onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">
+        <span>COMEÇAR</span>
+      </button>
+      <select id="environment-select" class="menu-sector-hit" aria-label="Escolher setor inicial">
+        <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
+        <option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option>
+      </select>
+      <button id="sound-toggle" class="menu-settings-hit" type="button" aria-label="Alternar sons" title="Alternar sons"></button>
+      <div hidden>
+        <span id="best-score">0</span><span id="achievement-count">0</span>
+        <p id="achievement-summary"><span id="achievement-count-hidden">0</span></p>
       </div>
-
-      <aside class="sector-board">
-        <h2>SETORES DO JOGO</h2>
-        <div><span>♟</span> Pátio do SENAI</div>
-        <div><span>▤</span> Administração</div>
-        <div><span>▦</span> Eletrônica</div>
-        <div><span>▣</span> Informática</div>
-        <div><span>⌘</span> TI e Redes</div>
-        <div><span>🔧</span> Hardware</div>
-        <div><span>⚗</span> Laboratório</div>
-      </aside>
-
-      <div class="menu-bottom"><b>CORRA, APRENDA, RESOLVA DESAFIOS</b><span>E CONQUISTE <strong>NOVOS NÍVEIS!</strong></span></div>
     </section>
-
     <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
     <section id="quiz" class="overlay quiz-overlay" style="display:none">
       <div class="dialog quiz-dialog">
@@ -85,6 +65,24 @@ window.addEventListener('unhandledrejection', function(e) {
   if(box){box.textContent='ERRO DE INICIALIZAÇÃO: '+(e.reason && e.reason.message ? e.reason.message : String(e.reason));box.classList.add('show');}
 });
 </script>
-<script src="./src/bundle.js?v=35" defer></script>
+<script>
+(async function(){
+  try {
+    const paths = ['./assets/menu-art-01.b64','./assets/menu-art-02.b64','./assets/menu-art-03.b64','./assets/menu-art-04.b64'];
+    const parts = await Promise.all(paths.map(async path => {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error('Falha ao carregar a arte: ' + path);
+      return (await response.text()).trim();
+    }));
+    const image = document.getElementById('menu-reference-image');
+    if (image) image.src = 'data:image/webp;base64,' + parts.join('');
+  } catch (error) {
+    console.error('Não foi possível carregar a arte do menu:', error);
+    const message = document.getElementById('message');
+    if (message) { message.textContent = 'Falha ao carregar a arte do menu.'; message.classList.add('show'); }
+  }
+})();
+</script>
+<script src="./src/bundle.js?v=36" defer></script>
 </body>
 </html>
