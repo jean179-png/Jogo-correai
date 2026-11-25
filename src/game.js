@@ -3,6 +3,7 @@ export class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
     this.leaderSprite = createCharacterSprite('A01');
+    this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06'].map(id => [id, createCharacterSprite(id)]));
     this.ctx = canvas.getContext('2d');
     this.callbacks = callbacks;
     this.width = 1280; this.height = 720; this.ground = 555;
@@ -40,8 +41,10 @@ export class Game {
   }
   update(dt) {
     this.frame += dt;
+    const spriteState = this.isJumping ? (this.velocityY < 0 ? 'jump' : 'fall') : 'run';
     this.leaderSprite?.update(dt);
-    if (this.leaderSprite) this.leaderSprite.setAnimation(this.isJumping ? (this.velocityY < 0 ? 'jump' : 'fall') : 'run');
+    this.leaderSprite?.setAnimation(spriteState);
+    for (const sprite of Object.values(this.characterSprites || {})) { sprite?.update(dt); sprite?.setAnimation(spriteState); }
     this.cameraShake = Math.max(0, this.cameraShake - 0.85 * dt);
     this.cameraX += ((this.speed - 6) * 0.7 - this.cameraX) * 0.035 * dt;
     this.landingPulse = Math.max(0, this.landingPulse - dt);
@@ -502,7 +505,10 @@ export class Game {
 
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
-    if (leader && this.leaderSprite?.draw(c, x - 44 * scale, y - 88 * scale, { scale })) return;
+    const variant = Math.abs(Math.floor(phase * 17)) % 10;
+    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 5));
+    const sprite = leader ? this.leaderSprite : this.characterSprites?.[spriteId];
+    if (sprite?.draw(c, x - 44 * scale, y - 88 * scale, { scale })) return;
     c.save();
     c.translate(Math.round(x), Math.round(y));
     c.scale(scale, scale);
