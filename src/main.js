@@ -163,9 +163,16 @@ $('#sound-toggle').addEventListener('click', () => {
   $('#sound-toggle').textContent = soundEnabled ? '🔊 SOM: LIGADO' : '🔇 SOM: DESLIGADO';
   if (soundEnabled) sound('success');
 });
-const jumpStart = (event) => { event.preventDefault(); game.jump(); };
-jumpButton.addEventListener('pointerdown', jumpStart);
-canvas.addEventListener('pointerdown', jumpStart);
+const jumpStart = (event) => {
+  if (event.cancelable) event.preventDefault();
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  game.jump();
+};
+jumpButton.addEventListener('pointerdown', jumpStart, { passive: false });
+canvas.addEventListener('pointerdown', (event) => {
+  if (event.target === canvas) jumpStart(event);
+}, { passive: false });
+
 window.addEventListener('keydown', (event) => {
   if (['Space','ArrowUp','KeyW'].includes(event.code)) { event.preventDefault(); if (!event.repeat) game.jump(); }
   if (event.code === 'Escape') game.togglePause();
