@@ -1209,6 +1209,7 @@ function checkAchievements(stats) {
   if (!next) return;
   unlockedAchievements.push(next.id);
   safeStorage.set('ondaAprendizesAchievements', JSON.stringify(unlockedAchievements));
+  if (menuStars) menuStars.textContent = unlockedAchievements.length + '/' + achievementList.length;
   const msg = $('#message');
   msg.textContent = `🏅 CONQUISTA: ${next.label} — ${next.detail}!`;
   msg.classList.add('show');
