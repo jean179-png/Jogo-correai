@@ -74,16 +74,16 @@ export class Game {
     }
     if (--this.spawnTimer <= 0) {
       // Rodízio de obstáculos: mistura cenários e evita repetir sempre cone/caixa.
-      const common = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet'];
+      const common = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet','printer','books','wetfloor'];
       // Obstáculos especiais acompanham o tema/ambiente atual da fase.
       const themed = [
-        ['car','server','drone'],          // Tecnologia
-        ['cabinet','officebox','chair'],   // Administração
-        ['battery','circuit','coil'],      // Eletrônica
-        ['hacker','computer','cable'],     // Informática
-        ['router','antenna','hacker'],     // TI e Redes
-        ['pc_case','motherboard','fan'],   // Hardware
-        ['labcart','microscope','cabinet'] // Laboratório
+        ['car','server','drone','robotarm'], // Tecnologia
+        ['cabinet','officebox','chair','books'], // Administração
+        ['battery','circuit','coil','ups'], // Eletrônica
+        ['hacker','computer','cable','printer'], // Informática
+        ['router','antenna','hacker','ups'], // TI e Redes
+        ['pc_case','motherboard','fan','robotarm'], // Hardware
+        ['labcart','microscope','cabinet','wetfloor'] // Laboratório
       ][this.environmentIndex()];
       // Evita buracos em sequência: mantém distância segura entre saltos.
       const pitReady = this.distance - (this.lastPitDistance ?? -9999) > 520;
@@ -94,7 +94,7 @@ export class Game {
       const type = pool[Math.floor(Math.random() * pool.length)];
       this.lastObstacleType = type;
       if (type === 'pit') this.lastPitDistance = this.distance;
-      const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68};
+      const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68,printer:72,books:66,wetfloor:58,robotarm:92,ups:74};
       const damage = type === 'pit' || type === 'gate' || type === 'barrier' || type === 'car' ? 2 : 1;
       this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
       this.spawnTimer = 105 + Math.random() * 70;
@@ -784,6 +784,46 @@ export class Game {
       }
       else if(o.type==='labcart'||o.type==='microscope'){
         c.save();c.translate(o.x,this.ground);c.fillStyle='#8797aa';c.fillRect(4,-38,86,7);c.fillRect(12,-31,6,25);c.fillRect(77,-31,6,25);c.fillStyle='#56b9ed';c.fillRect(12,-57,24,18);c.fillStyle='#f47721';c.fillRect(48,-56,25,18);c.fillStyle='#17243a';c.beginPath();c.arc(20,-3,7,0,Math.PI*2);c.arc(76,-3,7,0,Math.PI*2);c.fill();c.restore();
+      }
+      else if(o.type==='printer'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#263b62';c.fillRect(4,-55,64,48);
+        c.fillStyle='#dce8f4';c.fillRect(12,-49,48,25);
+        c.fillStyle='#8797aa';c.fillRect(8,-17,56,14);
+        c.fillStyle='#ffffff';c.fillRect(18,-25,38,18);
+        c.fillStyle='#f47721';c.fillRect(50,-43,8,5);
+        c.strokeStyle='#10265b';c.lineWidth=3;c.strokeRect(4,-55,64,48);c.restore();
+      }
+      else if(o.type==='books'){
+        c.save();c.translate(o.x,this.ground);
+        const bookColors=['#f47721','#1676c5','#20a66a'];
+        for(let k=0;k<3;k++){c.fillStyle=bookColors[k];c.fillRect(k*19,-(28+k*9),58,25);c.fillStyle='#fff';c.fillRect(k*19+6,-(22+k*9),45,3);}
+        c.restore();
+      }
+      else if(o.type==='wetfloor'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#ffd34d';c.beginPath();c.moveTo(29,-68);c.lineTo(57,-8);c.lineTo(1,-8);c.closePath();c.fill();
+        c.strokeStyle='#10265b';c.lineWidth=3;c.stroke();
+        c.fillStyle='#10265b';c.font='bold 16px Arial';c.textAlign='center';c.fillText('!',29,-28);
+        c.fillStyle='#f47721';c.fillRect(7,-7,44,7);c.restore();
+      }
+      else if(o.type==='robotarm'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#8797aa';c.fillRect(5,-12,82,12);
+        c.strokeStyle='#1676c5';c.lineWidth=13;c.lineCap='round';
+        c.beginPath();c.moveTo(25,-12);c.lineTo(34,-52);c.lineTo(68,-68);c.stroke();
+        c.fillStyle='#f47721';c.beginPath();c.arc(34,-52,9,0,Math.PI*2);c.arc(68,-68,8,0,Math.PI*2);c.fill();
+        c.strokeStyle='#10265b';c.lineWidth=5;c.beginPath();c.moveTo(68,-68);c.lineTo(82,-78);c.moveTo(68,-68);c.lineTo(83,-59);c.stroke();
+        c.restore();
+      }
+      else if(o.type==='ups'){
+        c.save();c.translate(o.x,this.ground);
+        c.fillStyle='#263b62';c.fillRect(5,-72,64,72);
+        c.fillStyle='#10265b';c.fillRect(12,-64,50,55);
+        c.fillStyle='#43e6bb';c.fillRect(20,-53,34,9);
+        c.fillStyle='#f47721';c.fillRect(20,-33,34,5);
+        c.fillStyle='#ffd34d';c.fillRect(30,-20,14,7);
+        c.strokeStyle='#8bd5ed';c.lineWidth=3;c.strokeRect(5,-72,64,72);c.restore();
       }
       else {c.fillStyle='#a96c35';c.fillRect(o.x,this.ground-58,58,58);c.strokeStyle='#f0c17d';c.lineWidth=4;c.strokeRect(o.x+5,this.ground-53,48,48);}
     }
