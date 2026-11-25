@@ -160,7 +160,15 @@ const game = new Game(canvas, {
     });
     quiz.style.display = 'grid';
   },
-  onGameOver: () => showResults()
+  onGameOver: () => showResults(),
+  onError: (error) => {
+    const msg = $('#message');
+    msg.textContent = `ERRO NO JOGO: ${error?.message || 'falha na animação'}`;
+    msg.classList.add('show');
+    overlay.style.display = 'grid';
+    const title = overlay.querySelector('h1');
+    if (title) title.textContent = 'FALHA AO INICIAR';
+  }
 });
 
 function beginGame() {
@@ -170,6 +178,9 @@ function beginGame() {
   questionIndex = 0;
   refillQuestionDeck();
   game.start(selectedEnvironment);
+  $('#message').textContent = 'JOGO INICIADO';
+  $('#message').classList.add('show');
+  setTimeout(() => $('#message').classList.remove('show'), 1200);
   quiz.style.display = 'none';
   results.style.display = 'none';
   overlay.style.display = 'none';
