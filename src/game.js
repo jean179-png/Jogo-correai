@@ -244,6 +244,66 @@ export class Game {
       {name:'LABORATÓRIO',sky1:'#75b9d9',sky2:'#e8f8ff',far:'#7e9eae',near:'#466477',accent:'#8be0bd',ground:'#4c906d'}
     ];
     const idx = this.environmentIndex(), t = themes[idx];
+    // Fase 1: pátio externo do SENAI, com escola, árvores, grade e calçada.
+    if (idx === 0) {
+      const sky = c.createLinearGradient(0,0,0,500);
+      sky.addColorStop(0,'#42a9ed'); sky.addColorStop(1,'#d9f2ff');
+      c.fillStyle=sky; c.fillRect(0,0,this.width,this.height);
+      // Nuvens em movimento suave.
+      for(let i=0;i<5;i++){
+        const x=((i*310-this.frame*.35)%(this.width+180)+this.width+180)%(this.width+180)-90;
+        c.fillStyle='#ffffff'; c.globalAlpha=.88;
+        c.beginPath(); c.arc(x,105+(i%2)*28,24,0,Math.PI*2);
+        c.arc(x+27,96+(i%2)*28,31,0,Math.PI*2);
+        c.arc(x+58,107+(i%2)*28,22,0,Math.PI*2); c.fill();
+      }
+      c.globalAlpha=1;
+      // Blocos da escola ao fundo.
+      c.fillStyle='#dce8f2'; c.fillRect(180,235,930,225);
+      c.fillStyle='#174f9b'; c.fillRect(160,218,970,28);
+      c.fillStyle='#f5f8fc'; c.fillRect(430,175,430,285);
+      c.fillStyle='#174f9b'; c.fillRect(410,160,470,25);
+      c.fillStyle='#0d3677'; c.fillRect(535,300,220,160);
+      c.fillStyle='#8bd5ed'; c.fillRect(555,320,180,92);
+      c.fillStyle='#10265b'; c.fillRect(620,410,50,50);
+      c.fillStyle='#ffffff'; c.font='bold 38px Arial'; c.textAlign='center';
+      c.fillText('SENAI',645,285); c.textAlign='left';
+      // Janelas laterais.
+      for(let row=0;row<2;row++) for(let col=0;col<9;col++){
+        const x=205+col*98, y=275+row*76;
+        c.fillStyle='#8bd5ed'; c.fillRect(x,y,58,42);
+        c.strokeStyle='#174f9b'; c.lineWidth=5; c.strokeRect(x,y,58,42);
+        c.fillStyle='#ffffff'; c.fillRect(x+27,y,4,42);
+      }
+      // Árvores com parallax.
+      for(let i=0;i<6;i++){
+        const x=((i*270-this.frame*.8)%(this.width+240)+this.width+240)%(this.width+240)-120;
+        c.fillStyle='#765038'; c.fillRect(x+25,345,18,110);
+        for(const [ox,oy,r] of [[0,0,40],[32,-18,38],[58,5,34],[-25,14,32]]){
+          c.fillStyle='#278b48'; c.beginPath(); c.arc(x+ox+32,oy+375,r,0,Math.PI*2); c.fill();
+          c.fillStyle='#49b95e'; c.beginPath(); c.arc(x+ox+23,oy+365,r*.55,0,Math.PI*2); c.fill();
+        }
+      }
+      // Grade frontal do campus.
+      c.fillStyle='#e9f2f8'; c.fillRect(0,440,this.width,9);
+      c.fillRect(0,486,this.width,8);
+      c.fillStyle='#f2f6fa';
+      for(let x=0;x<this.width;x+=42) c.fillRect(x,435,7,60);
+      c.fillStyle='#b8c8d8'; c.fillRect(0,495,this.width,18);
+      // Calçada e pista: chão permanece na coordenada usada pela física.
+      c.fillStyle='#c5cbd2'; c.fillRect(0,513,this.width,42);
+      c.fillStyle='#8d9baa'; c.fillRect(0,513,this.width,5);
+      c.fillStyle='#343e4b'; c.fillRect(0,555,this.width,165);
+      c.fillStyle='#f4d35e'; c.fillRect(0,555,this.width,5);
+      c.fillStyle='#f7f7f7';
+      for(let i=0;i<9;i++){
+        const x=((i*190-this.frame*this.speed*.85)%(this.width+190)+this.width+190)%(this.width+190)-90;
+        c.fillRect(x,650,92,7);
+      }
+      c.fillStyle='#10265bcc'; c.fillRect(18,92,250,34);
+      c.fillStyle='#ffffff'; c.font='bold 18px Arial'; c.fillText('FASE 1 · PÁTIO SENAI',30,115);
+      return;
+    }
     const sky = c.createLinearGradient(0,0,0,this.ground);
     sky.addColorStop(0,t.sky1); sky.addColorStop(1,t.sky2);
     c.fillStyle=sky; c.fillRect(0,0,this.width,this.height);
