@@ -546,11 +546,11 @@ export class Game {
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
     const variant = Math.abs(Math.floor(phase * 17)) % 10;
-    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 9));
+    const spriteId = leader ? 'A01' : 'A' + String(2 + (variant % 9)).padStart(2, '0');
     const sprite = leader ? this.leaderSprite : this.characterSprites?.[spriteId];
     const gait = Math.floor((phase * 5) % 6);
     const bob = Math.sin(this.frame * 0.24 + phase) * (this.isJumping ? 1.5 : 2.5);
-    if (sprite?.draw(c, x - 44 * scale, y - 88 * scale + bob * scale, { scale, frameOffset: gait })) return;
+    if (sprite?.draw(c, x - 36 * scale, y - 84 * scale + bob * scale, { scale, frameOffset: gait })) return;
     c.save();
     c.translate(Math.round(x), Math.round(y));
     c.scale(scale, scale);
