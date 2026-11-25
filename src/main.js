@@ -218,12 +218,8 @@ function activateStart(event) {
 }
 startButton.type = 'button';
 startButton.style.touchAction = 'manipulation';
+window.__ondaStart = activateStart;
 startButton.addEventListener('click', activateStart);
-// Android e navegadores móveis: tratar toque diretamente, sem depender do click sintetizado.
-startButton.addEventListener('touchend', activateStart, { passive: false });
-startButton.addEventListener('pointerup', (event) => {
-  if (event.pointerType === 'touch') activateStart(event);
-});
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
