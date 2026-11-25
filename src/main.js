@@ -5,13 +5,40 @@ const canvas = $('#game'), overlay = $('#overlay'), results = $('#results'), qui
 const startButton = $('#start'), jumpButton = $('#jump'), pauseButton = $('#pause');
 const environmentSelect = $('#environment-select');
 let questionIndex = 0, questionOpen = false, soundEnabled = true;
+let questionDeck = [];
 const questions = [
- {q:'Qual componente executa as instruções de um computador?',a:['Memória RAM','Processador (CPU)','Fonte de alimentação'],correct:1},
- {q:'Qual dispositivo conecta computadores em uma rede local?',a:['Switch','Monitor','Scanner'],correct:0},
- {q:'Qual prática ajuda a proteger uma conta?',a:['Repetir a mesma senha','Compartilhar a senha','Usar senha forte e exclusiva'],correct:2},
- {q:'Qual componente armazena arquivos mesmo com o computador desligado?',a:['SSD','Cooler','Memória cache'],correct:0},
- {q:'Para que serve um driver?',a:['Decorar a área de trabalho','Permitir a comunicação do sistema com o dispositivo','Aumentar o brilho'],correct:1}
+ {topic:'Hardware',level:'Fácil',q:'Qual componente executa as instruções de um computador?',a:['Memória RAM','Processador (CPU)','Fonte de alimentação','Gabinete'],correct:1,why:'A CPU interpreta e executa as instruções dos programas.'},
+ {topic:'Hardware',level:'Fácil',q:'Qual componente mantém dados temporários enquanto o computador está ligado?',a:['SSD','Memória RAM','Placa de vídeo','Fonte'],correct:1,why:'A memória RAM guarda temporariamente dados e programas em uso.'},
+ {topic:'Hardware',level:'Fácil',q:'Qual dispositivo armazena arquivos mesmo após desligar o computador?',a:['Cooler','Memória cache','SSD','Dissipador'],correct:2,why:'O SSD é uma unidade de armazenamento não volátil.'},
+ {topic:'Periféricos',level:'Fácil',q:'Qual destes é um dispositivo de entrada?',a:['Monitor','Teclado','Caixa de som','Projetor'],correct:1,why:'O teclado envia dados e comandos do usuário para o computador.'},
+ {topic:'Periféricos',level:'Fácil',q:'Qual periférico transforma documentos físicos em arquivos digitais?',a:['Scanner','Impressora','Headset','Estabilizador'],correct:0,why:'O scanner captura imagens ou documentos e os digitaliza.'},
+ {topic:'Software',level:'Fácil',q:'Para que serve um driver?',a:['Aumentar a memória RAM','Permitir a comunicação do sistema com um dispositivo','Limpar o monitor','Criar cópias de segurança automaticamente'],correct:1,why:'O driver permite que o sistema operacional reconheça e controle o hardware.'},
+ {topic:'Sistemas',level:'Fácil',q:'Qual é a principal função de um sistema operacional?',a:['Gerenciar recursos do computador e oferecer serviços aos programas','Somente editar imagens','Aumentar fisicamente o disco','Substituir todos os aplicativos'],correct:0,why:'O sistema operacional gerencia hardware, arquivos, memória e execução de programas.'},
+ {topic:'Redes',level:'Fácil',q:'Qual equipamento conecta dispositivos em uma rede local cabeada?',a:['Scanner','Switch','Projetor','Nobreak'],correct:1,why:'O switch encaminha quadros entre dispositivos conectados à rede local.'},
+ {topic:'Redes',level:'Médio',q:'O que significa a sigla IP em redes?',a:['Internet Program','Internal Process','Internet Protocol','Input Port'],correct:2,why:'IP significa Internet Protocol, protocolo usado no endereçamento e encaminhamento de pacotes.'},
+ {topic:'Redes',level:'Médio',q:'Qual serviço normalmente distribui endereços IP automaticamente?',a:['DHCP','HTTP','FTP',' HDMI'],correct:0,why:'O DHCP entrega configurações de rede automaticamente aos clientes.'},
+ {topic:'Segurança',level:'Fácil',q:'Qual prática ajuda a proteger uma conta?',a:['Repetir a mesma senha em todos os sites','Compartilhar a senha com colegas','Usar senha forte e exclusiva','Anotar a senha em local público'],correct:2,why:'Senhas fortes e exclusivas reduzem o risco de acesso indevido.'},
+ {topic:'Segurança',level:'Médio',q:'O que é phishing?',a:['Um tipo de memória','Uma tentativa de enganar a pessoa para obter dados ou acesso','Um cabo de rede','Uma atualização do sistema'],correct:1,why:'Phishing usa mensagens ou páginas falsas para induzir a vítima a revelar informações.'},
+ {topic:'Manutenção',level:'Fácil',q:'Qual ação é recomendada antes de abrir um gabinete para manutenção?',a:['Desconectar a energia e adotar proteção contra descarga eletrostática','Molhar os componentes','Deixar o computador ligado','Retirar peças puxando pelos cabos'],correct:0,why:'Desenergizar o equipamento e controlar a eletricidade estática ajuda a evitar danos e acidentes.'},
+ {topic:'Manutenção',level:'Médio',q:'Qual ferramenta é indicada para verificar tensão elétrica?',a:['Alicate comum','Multímetro','Pincel','Chave Phillips'],correct:1,why:'O multímetro mede grandezas elétricas, como tensão, corrente e resistência.'},
+ {topic:'Manutenção',level:'Fácil',q:'O que caracteriza uma manutenção preventiva?',a:['Agir somente depois da falha','Substituir sempre todo o computador','Realizar ações planejadas para reduzir a chance de falhas','Ignorar sinais de desgaste'],correct:2,why:'A manutenção preventiva é planejada para reduzir falhas e prolongar a vida útil.'},
+ {topic:'Armazenamento',level:'Médio',q:'Qual vantagem comum do SSD em relação ao HD mecânico?',a:['Possui partes móveis','Geralmente oferece acesso mais rápido aos dados','Não precisa de energia','Armazena dados apenas enquanto ligado'],correct:1,why:'O SSD usa memória flash e não possui pratos mecânicos móveis.'},
+ {topic:'Eletricidade',level:'Médio',q:'Qual é a função principal de um nobreak?',a:['Aumentar a velocidade da internet','Fornecer energia temporária e proteger contra interrupções e variações','Resfriar o processador','Ampliar a memória'],correct:1,why:'O nobreak mantém a alimentação por um período e pode oferecer proteção elétrica.'},
+ {topic:'Ergonomia',level:'Fácil',q:'Qual atitude contribui para uma postura adequada no computador?',a:['Manter o monitor em posição confortável e fazer pausas','Trabalhar sempre curvado','Manter os punhos tensionados','Evitar qualquer pausa'],correct:0,why:'Ajustes ergonômicos e pausas ajudam a reduzir desconforto e sobrecarga.'},
+ {topic:'TI Verde',level:'Fácil',q:'Como descartar corretamente equipamentos eletrônicos sem uso?',a:['Misturar com lixo orgânico','Queimar os componentes','Encaminhar a ponto de coleta ou logística reversa adequada','Jogar em terrenos vazios'],correct:2,why:'Resíduos eletrônicos devem seguir canais apropriados de coleta e destinação.'},
+ {topic:'Boas práticas',level:'Médio',q:'Por que registrar uma manutenção realizada?',a:['Para evitar qualquer manutenção futura','Para manter histórico, rastreabilidade e apoiar diagnósticos','Para substituir o inventário','Para apagar alertas do sistema'],correct:1,why:'O registro documenta intervenções, peças, datas e resultados, facilitando o acompanhamento.'}
 ];
+function refillQuestionDeck() {
+  questionDeck = questions.map((_, index) => index);
+  for (let i = questionDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [questionDeck[i], questionDeck[j]] = [questionDeck[j], questionDeck[i]];
+  }
+}
+function nextQuestion() {
+  if (!questionDeck.length) refillQuestionDeck();
+  return questions[questionDeck.pop()];
+}
 const getBest = () => Number(localStorage.getItem('ondaAprendizesRecord') || 0);
 $('#best-score').textContent = getBest().toLocaleString('pt-BR');
 
@@ -77,18 +104,25 @@ const game = new Game(canvas, {
   onQuestion: () => {
     if (questionOpen) return;
     questionOpen = true;
-    const q = questions[questionIndex++ % questions.length];
+    const q = nextQuestion();
+    $('#question-title').textContent = `DESAFIO · ${q.topic.toUpperCase()} · ${q.level.toUpperCase()}`;
     $('#question-text').textContent = q.q;
     $('#feedback').textContent = 'Escolha uma alternativa para liberar a passagem.';
     const answers = $('#answers'); answers.innerHTML = '';
     q.a.forEach((label,i) => {
-      const b = document.createElement('button'); b.className = 'answer'; b.textContent = label;
+      const b = document.createElement('button'); b.className = 'answer'; b.textContent = `${String.fromCharCode(65+i)}. ${label}`;
       b.addEventListener('click', () => {
         const ok = i === q.correct;
-        $('#feedback').textContent = ok ? 'Resposta correta! +150 pontos e +1 aprendiz.' : 'Não foi dessa vez! Você perdeu 1 aprendiz.';
+        $('#feedback').textContent = ok
+          ? `Correto! ${q.why} +150 pontos e +1 aprendiz.`
+          : `Resposta correta: ${String.fromCharCode(65+q.correct)}. ${q.a[q.correct]}. ${q.why} Você perdeu 1 aprendiz.`;
         sound(ok ? 'success' : 'hit');
-        answers.querySelectorAll('button').forEach(x => x.disabled = true);
-        setTimeout(() => { quiz.style.display = 'none'; questionOpen = false; game.answerQuestion(ok); }, 850);
+        answers.querySelectorAll('button').forEach((x,index) => {
+          x.disabled = true;
+          if (index === q.correct) x.classList.add('correct-answer');
+          else if (index === i && !ok) x.classList.add('wrong-answer');
+        });
+        setTimeout(() => { quiz.style.display = 'none'; questionOpen = false; game.answerQuestion(ok); }, 1900);
       });
       answers.appendChild(b);
     });
@@ -99,7 +133,7 @@ const game = new Game(canvas, {
 
 function beginGame() {
   quiz.style.display = 'none'; results.style.display = 'none'; overlay.style.display = 'none';
-  questionOpen = false; game.start(Number(environmentSelect.value));
+  questionOpen = false; questionIndex = 0; refillQuestionDeck(); game.start(Number(environmentSelect.value));
 }
 function showResults() {
   const distance = Math.floor(game.distance), score = game.score;
