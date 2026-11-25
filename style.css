@@ -223,3 +223,9 @@ body{min-height:100svh;min-height:100dvh}
 /* Botao COMEÇAR: clique/toque nativo */
 #start{position:relative;z-index:20;display:inline-flex;align-items:center;justify-content:center;min-height:48px;min-width:140px;touch-action:manipulation;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #overlay{pointer-events:auto}#overlay .dialog{pointer-events:auto}
+
+
+/* Resposta visual e prioridade de toque do botão inicial em celulares */
+#overlay .dialog #start{position:relative;z-index:30;pointer-events:auto;touch-action: manipulation;-webkit-user-select:none;user-select:none;}
+#start:active,#start.is-pressed{transform:translateY(3px);filter:brightness(1.2);box-shadow:0 2px 0 #a7470c;}
+#overlay .dialog{isolation:isolate;}
