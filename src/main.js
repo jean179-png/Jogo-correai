@@ -164,8 +164,15 @@ const game = new Game(canvas, {
 });
 
 function beginGame() {
-  quiz.style.display = 'none'; results.style.display = 'none'; overlay.style.display = 'none';
-  questionOpen = false; questionIndex = 0; refillQuestionDeck(); game.start(Number(environmentSelect.value));
+  const selectedEnvironment = Number(environmentSelect.value);
+  if (!Number.isInteger(selectedEnvironment) || selectedEnvironment < 0 || selectedEnvironment > 6) throw new Error('Ambiente selecionado inválido');
+  questionOpen = false;
+  questionIndex = 0;
+  refillQuestionDeck();
+  game.start(selectedEnvironment);
+  quiz.style.display = 'none';
+  results.style.display = 'none';
+  overlay.style.display = 'none';
 }
 function showResults() {
   const distance = Math.floor(game.distance), score = game.score;
@@ -195,8 +202,6 @@ function activateStart(event) {
   }
 }
 startButton.addEventListener('click', activateStart);
-startButton.addEventListener('pointerup', activateStart, { passive: false });
-startButton.addEventListener('touchend', activateStart, { passive: false });
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
