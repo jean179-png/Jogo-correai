@@ -474,116 +474,125 @@ export class Game {
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
     c.save();
-    c.translate(x, y);
+    c.translate(Math.round(x), Math.round(y));
     c.scale(scale, scale);
 
-    const running = !this.isJumping;
-    const variant = Math.abs(Math.floor(phase * 17)) % 6;
-    const skinTones = ['#efbd91','#d99a70','#b97855','#f2c7a0','#9b6247','#e4a77f'];
-    const hairTones = ['#263044','#3a2a22','#151d2d','#69452f','#171717','#8a5a35'];
+    // Personagens em pixel art: vista lateral, mochila, uniforme e silhueta legível.
+    const variant = Math.abs(Math.floor(phase * 17)) % 8;
+    const skin = ['#f0bd91','#c9875d','#9b6045','#e5a77d','#754833','#f2c9a4','#b97855','#d99a70'][variant];
+    const hair = ['#202638','#35251f','#111827','#6b452e','#171717','#8b5b35','#252525','#493126'][variant];
+    const shirt = leader ? '#f47721' : (variant % 3 === 0 ? '#f8fbff' : '#e9f3ff');
+    const trim = leader ? '#10265b' : '#1676c5';
     const cycle = this.frame * 0.255 + phase;
-    const leg = running ? Math.sin(cycle) * 15 : 0;
-    const arm = running ? Math.sin(cycle + Math.PI) * 12 : 0;
-    const bob = running ? (Math.abs(Math.sin(cycle)) * 3.2 + Math.sin(cycle*2)*0.7) : -5;
-    const stagger = reaction > 0 ? Math.max(0, 1 - reaction/28) : 0;
+    const run = !this.isJumping;
+    const legSwing = run ? Math.round(Math.sin(cycle) * 10) : 0;
+    const armSwing = run ? Math.round(Math.sin(cycle + Math.PI) * 7) : 0;
+    const bob = run ? Math.round(Math.abs(Math.sin(cycle)) * 2) : -5;
+    const stagger = reaction > 0 ? Math.max(0, 1 - reaction / 28) : 0;
     const dodge = Math.max(0, Math.min(1, avoidance));
-    const lean = this.isJumping ? -0.08 : 0.04 - Math.sin(phase*1.7)*stagger*0.22 - dodge*0.10;
 
-    // Sombra dinâmica: diminui e se afasta durante o salto.
-    c.globalAlpha = this.isJumping ? 0.20 : 0.30;
+    c.globalAlpha = this.isJumping ? 0.2 : 0.28;
     c.fillStyle = '#07152b';
-    c.beginPath();
-    c.ellipse(0, 1, this.isJumping ? 12 : 19, this.isJumping ? 3 : 5, 0, 0, Math.PI * 2);
-    c.fill();
+    c.fillRect(-17, -1, 35, 5);
     c.globalAlpha = 1;
+    c.translate(Math.round(-dodge * 3 + stagger * Math.sin(phase * 2) * 3), bob);
 
-    c.rotate(lean);
-    c.translate(stagger * Math.sin(phase*2.1) * 5 - dodge * (2 + Math.abs(Math.sin(phase))*3), bob + stagger * 2 + dodge * (Math.sin(phase*2.4)*2 - 1));
+    // Pernas articuladas em blocos, com tênis contrastantes.
+    const drawLeg = (x0, swing, front) => {
+      c.save();
+      c.translate(x0, -23);
+      c.rotate((this.isJumping ? (front ? -0.55 : 0.45) : swing * 0.045));
+      c.fillStyle = '#102044';
+      c.fillRect(-4, 0, 9, 15);
+      c.fillStyle = '#24436f';
+      c.fillRect(-3, 3, 7, 8);
+      c.fillStyle = '#17243a';
+      c.fillRect(-4, 12, 9, 7);
+      c.fillStyle = '#f47721';
+      c.fillRect(front ? 1 : -7, 17, 15, 6);
+      c.fillStyle = '#fff0d8';
+      c.fillRect(front ? 5 : -5, 18, 7, 2);
+      c.restore();
+    };
+    drawLeg(-6, legSwing, false);
+    drawLeg(5, -legSwing, true);
 
-    // Pernas articuladas e calçados.
-    const legColor = '#142b50';
-    c.lineCap = 'round';
-    c.lineJoin = 'round';
-    c.strokeStyle = legColor;
-    c.lineWidth = 8;
-    c.beginPath();
-    if (this.isJumping) {
-      c.moveTo(-5, -22); c.lineTo(-15, -10); c.lineTo(-20, -3);
-      c.moveTo(5, -22); c.lineTo(15, -12); c.lineTo(20, -7);
-    } else {
-      c.moveTo(-5, -22); c.lineTo(-8 + leg * .55, -10); c.lineTo(-13 + leg, -1);
-      c.moveTo(5, -22); c.lineTo(8 - leg * .55, -10); c.lineTo(13 - leg, -1);
-    }
-    c.stroke();
-    c.fillStyle = '#f47721';
-    c.beginPath();
-    c.ellipse(this.isJumping ? -22 : -14 + leg, -1, 8, 4, -0.12, 0, Math.PI*2);
-    c.ellipse(this.isJumping ? 22 : 14 - leg, -7, 8, 4, 0.12, 0, Math.PI*2);
-    c.fill();
+    // Mochila SENAI nas costas.
+    c.fillStyle = '#10265b';
+    c.fillRect(-22, -54, 11, 25);
+    c.fillStyle = leader ? '#f47721' : '#1676c5';
+    c.fillRect(-21, -52, 8, 18);
+    c.fillStyle = '#ffd45c';
+    c.fillRect(-20, -48, 6, 3);
+    c.fillStyle = '#0b1934';
+    c.fillRect(-18, -29, 5, 5);
 
-    // Camisa polo SENAI, com gola e detalhes.
-    const shirt = leader ? '#f47721' : '#f7fbff';
+    // Tronco e uniforme escolar/técnico.
+    c.fillStyle = '#102044';
+    c.fillRect(-12, -54, 25, 31);
     c.fillStyle = shirt;
-    c.beginPath();
-    c.roundRect(-14, -53, 28, 34, 7);
-    c.fill();
-    c.fillStyle = leader ? '#fff' : '#d8e8f8';
-    c.beginPath();
-    c.moveTo(-6, -52); c.lineTo(0, -45); c.lineTo(6, -52);
-    c.lineTo(3, -55); c.lineTo(-3, -55); c.closePath();
-    c.fill();
-
-    // Braços com balanço oposto às pernas.
-    c.strokeStyle = '#e8ad83';
-    c.lineWidth = 6;
-    c.beginPath();
-    if (this.isJumping) {
-      c.moveTo(-11,-47); c.lineTo(-21,-59); c.lineTo(-25,-66);
-      c.moveTo(11,-47); c.lineTo(21,-59); c.lineTo(25,-66);
-    } else {
-      c.moveTo(-11,-47); c.lineTo(-19-arm*.35,-37); c.lineTo(-22-arm,-31);
-      c.moveTo(11,-47); c.lineTo(19+arm*.35,-37); c.lineTo(22+arm,-31);
-    }
-    c.stroke();
-
-    // Cabeça, orelhas, cabelo e expressão.
-    c.fillStyle = skinTones[variant];
-    c.beginPath(); c.arc(-12,-67,3.5,0,Math.PI*2); c.arc(12,-67,3.5,0,Math.PI*2); c.fill();
-    c.fillStyle = skinTones[variant];
-    c.beginPath(); c.arc(0,-68,13,0,Math.PI*2); c.fill();
-    c.fillStyle = hairTones[variant];
-    c.beginPath();
-    c.arc(0,-72,13,Math.PI,Math.PI*2);
-    c.quadraticCurveTo(12,-73,10,-65);
-    c.quadraticCurveTo(3,-70,-2,-67);
-    c.quadraticCurveTo(-8,-64,-12,-67);
-    c.closePath(); c.fill();
-
-    // Pequenas diferenças de cabelo e faixa para individualizar os aprendizes.
-    if (variant === 1 || variant === 4) {
-      c.fillStyle = '#263044'; c.fillRect(-13, -75, 26, 4);
-    } else if (variant === 3) {
-      c.fillStyle = '#f47721'; c.fillRect(-8, -82, 16, 4);
-    }
-
-    // Olhos, sobrancelhas e sorriso.
-    c.fillStyle = '#263044';
-    c.beginPath(); c.arc(-4,-68,1.4,0,Math.PI*2); c.arc(4,-68,1.4,0,Math.PI*2); c.fill();
-    c.strokeStyle = '#9b5e4c'; c.lineWidth = 1.5;
-    c.beginPath(); c.arc(0,-63,3.5,.15,Math.PI-.15); c.stroke();
-
-    // Pequeno emblema SENAI estilizado no peito.
-    c.fillStyle = leader ? '#10265b' : '#1676c5';
-    c.fillRect(3,-43,8,6);
+    c.fillRect(-11, -55, 22, 28);
+    c.fillRect(-14, -51, 5, 19);
+    c.fillRect(10, -51, 5, 18);
+    c.fillStyle = leader ? '#ffd45c' : '#b8d9f4';
+    c.fillRect(-3, -54, 7, 5);
+    c.fillStyle = trim;
+    c.fillRect(4, -44, 6, 7);
     c.fillStyle = '#fff';
-    c.font = 'bold 4px Arial';
-    c.textAlign = 'center';
-    c.fillText('S',7,-38.5);
+    c.fillRect(6, -43, 2, 4);
 
-    // Contorno sutil para destacar o personagem do cenário.
-    c.strokeStyle = '#10265b';
-    c.lineWidth = 1;
-    c.strokeRect(-14,-53,28,34);
+    // Braços em movimento, com mãos visíveis.
+    const drawArm = (side, swing) => {
+      c.save();
+      c.translate(side * 10, -48);
+      c.rotate(this.isJumping ? (side > 0 ? -0.75 : 0.65) : swing * 0.055);
+      c.fillStyle = '#102044';
+      c.fillRect(-1, 0, 8, 5);
+      c.fillStyle = shirt;
+      c.fillRect(0, 1, 6, 4);
+      c.fillStyle = skin;
+      c.fillRect(2, 5, 6, 9);
+      c.fillRect(4, 12, 7, 5);
+      c.restore();
+    };
+    drawArm(-1, armSwing);
+    drawArm(1, -armSwing);
+
+    // Cabeça, cabelo em silhueta pixelada e rosto voltado para a direita.
+    c.fillStyle = '#102044';
+    c.fillRect(-10, -82, 23, 25);
+    c.fillStyle = skin;
+    c.fillRect(-8, -80, 19, 21);
+    c.fillRect(8, -74, 6, 8);
+    c.fillRect(3, -59, 7, 3);
+    c.fillStyle = hair;
+    c.fillRect(-10, -84, 21, 8);
+    c.fillRect(-10, -79, 6, 8);
+    c.fillRect(-5, -76, 5, 4);
+    if (variant === 1 || variant === 4 || variant === 6) {
+      c.fillRect(-9, -87, 17, 5);
+      c.fillRect(7, -81, 5, 8);
+    } else if (variant === 2 || variant === 5) {
+      c.fillRect(-8, -88, 14, 5);
+      c.fillRect(-11, -82, 5, 8);
+    } else {
+      c.fillRect(-7, -87, 10, 4);
+      c.fillRect(4, -82, 7, 4);
+    }
+    // Olho, sobrancelha e sorriso em poucos pixels.
+    c.fillStyle = '#17243a';
+    c.fillRect(7, -73, 3, 3);
+    c.fillRect(6, -77, 5, 2);
+    c.fillStyle = '#fff';
+    c.fillRect(8, -73, 1, 1);
+    c.fillStyle = '#9b5147';
+    c.fillRect(10, -65, 4, 2);
+
+    // Detalhe de identificação no uniforme.
+    c.fillStyle = '#ffd45c';
+    c.fillRect(-2, -39, 5, 4);
+    c.fillStyle = '#10265b';
+    c.fillRect(-1, -38, 3, 2);
     c.restore();
   }
 
