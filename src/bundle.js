@@ -1,4 +1,5 @@
-/* Onda de Aprendizes — pacote clássico para navegador móvel */
+/* Onda de Aprendizes — pacote clássico compatível com navegadores móveis */
+(()=>{
 /**
  * Onda de Aprendizes — Sistema de animação por sprites
  * Etapa 2: infraestrutura para personagens em spritesheets.
@@ -99,7 +100,10 @@ function createCharacterSprite(id = 'A01') {
   return config ? new SpriteAnimator(config) : null;
 }
 
-
+window.createCharacterSprite = createCharacterSprite;
+})();
+(()=>{
+const createCharacterSprite = window.createCharacterSprite;
 class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
@@ -646,7 +650,7 @@ class Game {
     const run = !this.isJumping;
     const legSwing = run ? Math.round(Math.sin(cycle) * 10) : 0;
     const armSwing = run ? Math.round(Math.sin(cycle + Math.PI) * 7) : 0;
-    const bob = run ? Math.round(Math.abs(Math.sin(cycle)) * 2) : -5;
+    const bobOffset = run ? Math.round(Math.abs(Math.sin(cycle)) * 2) : -5;
     const stagger = reaction > 0 ? Math.max(0, 1 - reaction / 28) : 0;
     const dodge = Math.max(0, Math.min(1, avoidance));
 
@@ -654,7 +658,7 @@ class Game {
     c.fillStyle = '#07152b';
     c.fillRect(-17, -1, 35, 5);
     c.globalAlpha = 1;
-    c.translate(Math.round(-dodge * 3 + stagger * Math.sin(phase * 2) * 3), bob);
+    c.translate(Math.round(-dodge * 3 + stagger * Math.sin(phase * 2) * 3), bobOffset);
 
     // Pernas articuladas em blocos, com tênis contrastantes.
     const drawLeg = (x0, swing, front) => {
@@ -1131,7 +1135,10 @@ class Game {
   }
 }
 
-
+window.Game = Game;
+})();
+(()=>{
+const Game = window.Game;
 const $ = (s) => document.querySelector(s);
 const canvas = $('#game'), overlay = $('#overlay'), results = $('#results'), quiz = $('#quiz');
 const startButton = $('#start'), jumpButton = $('#jump'), pauseButton = $('#pause');
@@ -1374,3 +1381,5 @@ window.addEventListener('keydown', (event) => {
   if (event.code === 'Escape') game.togglePause();
 });
 pauseButton.addEventListener('click', () => game.togglePause());
+
+})();
