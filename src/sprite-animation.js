@@ -82,6 +82,7 @@ export const CHARACTER_SPRITES = {
       run:   { frames: [0, 1, 2, 3, 4, 5], columns: 6, frameDuration: 5 },
       jump:  { frames: [6, 7, 8, 9], columns: 6, frameDuration: 7 },
       fall:  { frames: [10, 11], columns: 6, frameDuration: 7 },
+      hit:   { frames: [10, 11], columns: 6, frameDuration: 4 },
       idle:  { frames: [12, 13], columns: 6, frameDuration: 12 },
       cheer: { frames: [14, 15], columns: 6, frameDuration: 9 }
     }
