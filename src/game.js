@@ -99,7 +99,7 @@ export class Game {
     }
     if (--this.spawnTimer <= 0) {
       // Rodízio de obstáculos: mistura cenários e evita repetir sempre cone/caixa.
-      const common = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet','printer','books','wetfloor'];
+      const common = ['pit','crate','barrier','cone','chair','gate','toolbox','tire','sign','cable','monitor','pallet','printer','books','wetfloor','usb','keyboard','headphones'];
       // Obstáculos especiais acompanham o tema/ambiente atual da fase.
       const themed = [
         ['car','server','drone','robotarm'], // Tecnologia
@@ -119,7 +119,7 @@ export class Game {
       const type = pool[Math.floor(Math.random() * pool.length)];
       this.lastObstacleType = type;
       if (type === 'pit') this.lastPitDistance = this.distance;
-      const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68,printer:72,books:66,wetfloor:58,robotarm:92,ups:74};
+      const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68,printer:72,books:66,wetfloor:58,robotarm:92,ups:74,usb:46,keyboard:82,headphones:66};
       const damage = type === 'pit' || type === 'gate' || type === 'barrier' || type === 'car' ? 2 : 1;
       this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
       const spawnReduction = this.difficultyLevel * 6;
@@ -877,6 +877,29 @@ export class Game {
         c.beginPath();c.moveTo(25,-12);c.lineTo(34,-52);c.lineTo(68,-68);c.stroke();
         c.fillStyle='#f47721';c.beginPath();c.arc(34,-52,9,0,Math.PI*2);c.arc(68,-68,8,0,Math.PI*2);c.fill();
         c.strokeStyle='#10265b';c.lineWidth=5;c.beginPath();c.moveTo(68,-68);c.lineTo(82,-78);c.moveTo(68,-68);c.lineTo(83,-59);c.stroke();
+        c.restore();
+      }
+      else if(o.type==='usb'){
+        c.save(); c.translate(o.x,this.ground);
+        c.fillStyle='#8797aa'; c.fillRect(7,-37,34,30);
+        c.fillStyle='#263b62'; c.fillRect(12,-31,24,18);
+        c.fillStyle='#f47721'; c.fillRect(17,-24,14,5);
+        c.fillStyle='#cbd8e6'; c.fillRect(18,-7,12,7);
+        c.strokeStyle='#10265b'; c.lineWidth=3; c.strokeRect(7,-37,34,30); c.restore();
+      }
+      else if(o.type==='keyboard'){
+        c.save(); c.translate(o.x,this.ground);
+        c.fillStyle='#263b62'; c.fillRect(0,-25,82,22);
+        c.fillStyle='#dce8f4';
+        for(let row=0;row<2;row++) for(let k=0;k<10;k++) c.fillRect(5+k*7.5,-21+row*8,5,5);
+        c.fillStyle='#f47721'; c.fillRect(25,-8,32,3);
+        c.strokeStyle='#10265b'; c.lineWidth=3; c.strokeRect(0,-25,82,22); c.restore();
+      }
+      else if(o.type==='headphones'){
+        c.save(); c.translate(o.x,this.ground);
+        c.strokeStyle='#263b62'; c.lineWidth=9; c.beginPath(); c.arc(33,-29,24,Math.PI,0); c.stroke();
+        c.fillStyle='#f47721'; c.fillRect(3,-31,13,25); c.fillRect(50,-31,13,25);
+        c.fillStyle='#10265b'; c.fillRect(6,-26,7,14); c.fillRect(53,-26,7,14);
         c.restore();
       }
       else if(o.type==='ups'){
