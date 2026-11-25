@@ -37,8 +37,15 @@ export class Game {
     if (!this.running || this.paused) return;
     const dt = this.lastTime ? Math.min((time - this.lastTime) / 16.67, 2) : 1;
     this.lastTime = time;
-    this.update(dt); this.draw();
-    requestAnimationFrame(this.loop);
+    try {
+      this.update(dt);
+      this.draw();
+      requestAnimationFrame(this.loop);
+    } catch (error) {
+      this.running = false;
+      console.error('Erro durante a execução do jogo:', error);
+      this.callbacks.onError?.(error);
+    }
   }
   update(dt) {
     this.frame += dt;
