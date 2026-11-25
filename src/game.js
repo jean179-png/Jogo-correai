@@ -514,8 +514,7 @@ export class Game {
     c.scale(scale, scale);
 
     // Personagens em pixel art: vista lateral, mochila, uniforme e silhueta legível.
-    const variant = Math.abs(Math.floor(phase * 17)) % 10;
-    // Elenco A01–A10: diversidade de tons de pele, cabelos e acessórios.
+    // Elenco procedural de reserva: diversidade de tons de pele, cabelos e acessórios.
     const skin = ['#f0bd91','#c9875d','#9b6045','#e5a77d','#754833','#f2c9a4','#b97855','#d99a70','#633d2d','#e8b58d'][variant];
     const hair = ['#202638','#35251f','#111827','#6b452e','#171717','#8b5b35','#252525','#493126','#b84f2f','#d5b36a'][variant];
     const shirt = '#f47721';
