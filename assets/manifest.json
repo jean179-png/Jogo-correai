@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "status": "planned",
+  "notes": "Manifesto inicial. Os caminhos são destinos planejados; não representam arquivos de arte já existentes.",
+  "rendering": {
+    "canvasWidth": 1280,
+    "canvasHeight": 720,
+    "pixelArt": true,
+    "imageSmoothingEnabled": false,
+    "anchor": "bottom-center"
+  },
+  "characters": [
+    {
+      "id": "apprentice_01",
+      "folder": "assets/characters/apprentice_01",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_02",
+      "folder": "assets/characters/apprentice_02",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_03",
+      "folder": "assets/characters/apprentice_03",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_04",
+      "folder": "assets/characters/apprentice_04",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_05",
+      "folder": "assets/characters/apprentice_05",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_06",
+      "folder": "assets/characters/apprentice_06",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_07",
+      "folder": "assets/characters/apprentice_07",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_08",
+      "folder": "assets/characters/apprentice_08",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_09",
+      "folder": "assets/characters/apprentice_09",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "apprentice_10",
+      "folder": "assets/characters/apprentice_10",
+      "states": [
+        "idle",
+        "run",
+        "jump",
+        "fall",
+        "hit",
+        "celebrate"
+      ],
+      "status": "pending"
+    }
+  ],
+  "backgrounds": [
+    {
+      "theme": "school",
+      "layers": [
+        "sky",
+        "far_buildings",
+        "near_buildings",
+        "trees_or_structures",
+        "fence_or_foreground",
+        "sidewalk",
+        "road"
+      ],
+      "status": "pending"
+    },
+    {
+      "theme": "industrial",
+      "layers": [
+        "sky",
+        "far_buildings",
+        "near_buildings",
+        "trees_or_structures",
+        "fence_or_foreground",
+        "sidewalk",
+        "road"
+      ],
+      "status": "pending"
+    },
+    {
+      "theme": "technology",
+      "layers": [
+        "sky",
+        "far_buildings",
+        "near_buildings",
+        "trees_or_structures",
+        "fence_or_foreground",
+        "sidewalk",
+        "road"
+      ],
+      "status": "pending"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "pit",
+      "path": "assets/obstacles/pit.png",
+      "status": "pending"
+    },
+    {
+      "id": "car",
+      "path": "assets/obstacles/car.png",
+      "status": "pending"
+    },
+    {
+      "id": "cone",
+      "path": "assets/obstacles/cone.png",
+      "status": "pending"
+    },
+    {
+      "id": "barrier",
+      "path": "assets/obstacles/barrier.png",
+      "status": "pending"
+    },
+    {
+      "id": "cable",
+      "path": "assets/obstacles/cable.png",
+      "status": "pending"
+    },
+    {
+      "id": "chair",
+      "path": "assets/obstacles/chair.png",
+      "status": "pending"
+    },
+    {
+      "id": "cabinet",
+      "path": "assets/obstacles/cabinet.png",
+      "status": "pending"
+    },
+    {
+      "id": "toolbox",
+      "path": "assets/obstacles/toolbox.png",
+      "status": "pending"
+    },
+    {
+      "id": "computer",
+      "path": "assets/obstacles/computer.png",
+      "status": "pending"
+    },
+    {
+      "id": "server",
+      "path": "assets/obstacles/server.png",
+      "status": "pending"
+    },
+    {
+      "id": "router",
+      "path": "assets/obstacles/router.png",
+      "status": "pending"
+    },
+    {
+      "id": "battery",
+      "path": "assets/obstacles/battery.png",
+      "status": "pending"
+    },
+    {
+      "id": "motherboard",
+      "path": "assets/obstacles/motherboard.png",
+      "status": "pending"
+    },
+    {
+      "id": "antenna",
+      "path": "assets/obstacles/antenna.png",
+      "status": "pending"
+    },
+    {
+      "id": "gate",
+      "path": "assets/obstacles/gate.png",
+      "status": "pending"
+    }
+  ],
+  "items": [
+    {
+      "id": "coin",
+      "path": "assets/items/coin.png",
+      "status": "pending"
+    },
+    {
+      "id": "toolbox",
+      "path": "assets/items/toolbox.png",
+      "status": "pending"
+    },
+    {
+      "id": "shield",
+      "path": "assets/items/shield.png",
+      "status": "pending"
+    },
+    {
+      "id": "magnet",
+      "path": "assets/items/magnet.png",
+      "status": "pending"
+    },
+    {
+      "id": "turbo",
+      "path": "assets/items/turbo.png",
+      "status": "pending"
+    }
+  ]
+}
