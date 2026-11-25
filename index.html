@@ -24,19 +24,19 @@
     <section id="overlay" class="overlay menu-overlay" aria-label="Menu inicial Onda de Aprendizes">
       <div class="menu-art">
         <img id="menu-reference-image" class="menu-reference-image" alt="Menu Onda de Aprendizes no campus SENAI">
+        <button id="start" class="menu-start-hit" type="button" aria-label="Começar o jogo"
+          onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">
+          <span>COMEÇAR</span>
+        </button>
+        <select id="environment-select" class="menu-sector-hit" aria-label="Escolher setor inicial">
+          <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
+          <option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option>
+        </select>
+        <button id="sound-toggle" class="menu-settings-hit" type="button" aria-label="Alternar sons" title="Alternar sons"></button>
       </div>
-      <button id="start" class="menu-start-hit" type="button" aria-label="Começar o jogo"
-        onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">
-        <span>COMEÇAR</span>
-      </button>
-      <select id="environment-select" class="menu-sector-hit" aria-label="Escolher setor inicial">
-        <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
-        <option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option>
-      </select>
-      <button id="sound-toggle" class="menu-settings-hit" type="button" aria-label="Alternar sons" title="Alternar sons"></button>
       <div hidden>
         <span id="best-score">0</span><span id="achievement-count">0</span>
-        <p id="achievement-summary"><span id="achievement-count-hidden">0</span></p>
+        <p id="achievement-summary">CONQUISTAS</p>
       </div>
     </section>
     <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
