@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=33">
+  <link rel="stylesheet" href="./style.css?v=34">
 
 </head>
 <body>
@@ -22,27 +22,47 @@
     <canvas id="game" width="1280" height="720" aria-label="Jogo Onda de Aprendizes"></canvas>
 
     <section id="overlay" class="overlay menu-overlay" aria-label="Menu inicial Onda de Aprendizes">
-      <div class="menu-art">
-        <img id="menu-reference-image" class="menu-reference-image" alt="Menu Pixel Art do Onda de Aprendizes no campus SENAI">
-        <div class="menu-title-hit" aria-hidden="true"></div>
-        <button id="start" class="menu-hit menu-start-hit" type="button" aria-label="Começar o jogo"><span>COMEÇAR</span></button>
-        <button class="menu-hit menu-missions-hit" data-menu="missions" type="button" aria-label="Abrir missões"></button>
-        <button class="menu-hit menu-achievements-hit" data-menu="achievements" type="button" aria-label="Abrir conquistas"></button>
-        <button class="menu-hit menu-ranking-hit" data-menu="ranking" type="button" aria-label="Abrir ranking"></button>
-        <button class="menu-hit menu-settings-hit" data-menu="settings" type="button" aria-label="Abrir configurações"></button>
-        <div class="sector-board-live">
+      <div class="menu-art" id="menu-art">
+        <img class="menu-background" src="./assets/cenarios/campus-senaipixel.svg" alt="" aria-hidden="true">
+        <div class="menu-shade" aria-hidden="true"></div>
+        <div class="menu-profile-card">
+          <div class="menu-avatar">A</div>
+          <div><b>APRENDIZ SENAI</b><small>NÍVEL 01 · INICIANTE</small><div class="xp-track"><i></i></div></div>
+        </div>
+        <div class="menu-counters">
+          <div class="menu-counter"><span>🪙</span><b id="menu-coins">0</b></div>
+          <div class="menu-counter"><span>⭐</span><b id="menu-stars">0</b></div>
+          <button class="menu-counter menu-gear" data-menu="settings" type="button" aria-label="Configurações">⚙</button>
+        </div>
+        <div class="menu-logo">
+          <div class="menu-wave-logo">〰</div>
+          <div class="menu-logo-copy"><span>ONDA DE</span><strong>APRENDIZES</strong><small>SENAI</small></div>
+        </div>
+        <div class="menu-runners" aria-hidden="true">
+          <div class="menu-runner runner-a01"></div>
+          <div class="menu-runner runner-a04"></div>
+        </div>
+        <div class="menu-actions">
+          <button id="start" class="menu-action menu-action-start" type="button"><span>▶</span> COMEÇAR</button>
+          <button class="menu-action" data-menu="missions" type="button"><span>▣</span> MISSÕES</button>
+          <button class="menu-action" data-menu="achievements" type="button"><span>🏆</span> CONQUISTAS</button>
+          <button class="menu-action" data-menu="ranking" type="button"><span>▥</span> RANKING</button>
+          <button class="menu-action" data-menu="settings" type="button"><span>⚙</span> CONFIGURAÇÕES</button>
+        </div>
+        <aside class="sector-board-live">
           <div class="sector-heading">SETORES DO JOGO</div>
           <div class="sector-list">
-            <button class="sector-choice" data-env="0" type="button">🏫 <span>Pátio do SENAI</span></button>
-            <button class="sector-choice" data-env="1" type="button">📋 <span>Administração</span></button>
-            <button class="sector-choice" data-env="2" type="button">🔌 <span>Eletrônica</span></button>
-            <button class="sector-choice" data-env="3" type="button">💻 <span>Informática</span></button>
-            <button class="sector-choice" data-env="4" type="button">🌐 <span>TI e Redes</span></button>
-            <button class="sector-choice" data-env="5" type="button">🔧 <span>Hardware</span></button>
-            <button class="sector-choice" data-env="6" type="button">⚗️ <span>Laboratório</span></button>
+            <button class="sector-choice is-selected" data-env="0" type="button"><span class="sector-symbol">🏫</span><span>Pátio do SENAI</span></button>
+            <button class="sector-choice" data-env="1" type="button"><span class="sector-symbol">📋</span><span>Administração</span></button>
+            <button class="sector-choice" data-env="2" type="button"><span class="sector-symbol">🔌</span><span>Eletrônica</span></button>
+            <button class="sector-choice" data-env="3" type="button"><span class="sector-symbol">💻</span><span>Informática</span></button>
+            <button class="sector-choice" data-env="4" type="button"><span class="sector-symbol">🌐</span><span>TI e Redes</span></button>
+            <button class="sector-choice" data-env="5" type="button"><span class="sector-symbol">🔧</span><span>Hardware</span></button>
+            <button class="sector-choice" data-env="6" type="button"><span class="sector-symbol">⚗️</span><span>Laboratório</span></button>
           </div>
-        </div>
-        <button class="menu-profile-hit" data-menu="profile" type="button" aria-label="Ver perfil do aprendiz"></button>
+        </aside>
+        <div class="menu-slogan"><b>CORRA, APRENDA, RESOLVA DESAFIOS</b><strong>E CONQUISTE NOVOS NÍVEIS!</strong></div>
+        <button class="menu-profile-hit" data-menu="profile" type="button" aria-label="Abrir perfil do aprendiz"></button>
       </div>
       <select id="environment-select" class="visually-hidden" aria-label="Setor inicial">
         <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
@@ -55,9 +75,9 @@
           <p class="menu-panel-eyebrow">ONDA DE APRENDIZES · SENAI</p>
           <h2 id="menu-panel-title">MISSÕES</h2>
           <div id="menu-panel-content"></div>
+          <button id="sound-toggle" class="menu-panel-action secondary-action" type="button" hidden>🔊 SOM: LIGADO</button>
         </div>
       </div>
-      <div id="menu-sound-holder" hidden><button id="sound-toggle" class="secondary" type="button">🔊 SOM: LIGADO</button></div>
     </section>
     <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
     <section id="quiz" class="overlay quiz-overlay" style="display:none">
@@ -85,24 +105,7 @@ window.addEventListener('unhandledrejection', function(e) {
   if(box){box.textContent='ERRO DE INICIALIZAÇÃO: '+(e.reason && e.reason.message ? e.reason.message : String(e.reason));box.classList.add('show');}
 });
 </script>
-<script>
-(async function(){
-  try {
-    const paths = ['./assets/menu-art-01.b64','./assets/menu-art-02.b64','./assets/menu-art-03.b64','./assets/menu-art-04.b64'];
-    const parts = await Promise.all(paths.map(async path => {
-      const response = await fetch(path);
-      if (!response.ok) throw new Error('Falha ao carregar a arte: ' + path);
-      return (await response.text()).trim();
-    }));
-    const image = document.getElementById('menu-reference-image');
-    if (image) image.src = 'data:image/webp;base64,' + parts.join('');
-  } catch (error) {
-    console.error('Não foi possível carregar a arte do menu:', error);
-    const message = document.getElementById('message');
-    if (message) { message.textContent = 'Falha ao carregar a arte do menu.'; message.classList.add('show'); }
-  }
-})();
-</script>
-<script src="./src/bundle.js?v=37" defer></script>
+
+<script src="./src/bundle.js?v=38" defer></script>
 </body>
 </html>
