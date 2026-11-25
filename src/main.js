@@ -39,8 +39,31 @@ function nextQuestion() {
   if (!questionDeck.length) refillQuestionDeck();
   return questions[questionDeck.pop()];
 }
+const achievementList = [
+  {id:'distance100',label:'Primeiros passos',detail:'Alcance 100 metros',test:s=>s.distance>=100},
+  {id:'distance500',label:'Aprendiz persistente',detail:'Alcance 500 metros',test:s=>s.distance>=500},
+  {id:'distance1000',label:'Mestre da pista',detail:'Alcance 1.000 metros',test:s=>s.distance>=1000},
+  {id:'crowd10',label:'Trabalho em equipe',detail:'Reúna 10 aprendizes',test:s=>s.crowd>=10},
+  {id:'crowd50',label:'Liderança SENAI',detail:'Reúna 50 aprendizes',test:s=>s.crowd>=50},
+  {id:'crowd100',label:'Grande equipe',detail:'Reúna 100 aprendizes',test:s=>s.crowd>=100},
+  {id:'score1000',label:'Pontuação de destaque',detail:'Faça 1.000 pontos',test:s=>s.score>=1000}
+];
+let unlockedAchievements = [];
+try { unlockedAchievements = JSON.parse(localStorage.getItem('ondaAprendizesAchievements') || '[]'); } catch (_) {}
+function checkAchievements(stats) {
+  const next = achievementList.find(a => !unlockedAchievements.includes(a.id) && a.test(stats));
+  if (!next) return;
+  unlockedAchievements.push(next.id);
+  localStorage.setItem('ondaAprendizesAchievements', JSON.stringify(unlockedAchievements));
+  const msg = $('#message');
+  msg.textContent = `🏅 CONQUISTA: ${next.label} — ${next.detail}!`;
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 3000);
+}
 const getBest = () => Number(localStorage.getItem('ondaAprendizesRecord') || 0);
 $('#best-score').textContent = getBest().toLocaleString('pt-BR');
+const achievementCount = $('#achievement-count');
+if (achievementCount) achievementCount.textContent = unlockedAchievements.length;
 
 function sound(kind) {
   if (!soundEnabled) return;
@@ -67,6 +90,7 @@ const game = new Game(canvas, {
     $('#distance').textContent = `${distance} m`;
     $('#crowd').textContent = crowd;
     $('#score').textContent = score.toLocaleString('pt-BR');
+    checkAchievements({ distance, crowd, score });
   },
   onSound: sound,
   onMilestone: (target) => {
