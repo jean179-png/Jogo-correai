@@ -1,7 +1,7 @@
 {
-  "version": 2,
-  "status": "planned",
-  "notes": "Dez spritesheets SVG de aprendizes disponíveis (A01–A10), com variações de paleta; cenários, obstáculos, coletáveis e interface são renderizados pelo motor 2D.",
+  "version": 3,
+  "status": "integrated",
+  "notes": "Dez personagens PNG A01–A10 integrados ao motor do jogo. Cada faixa possui 20 quadros de 72x84 pixels com transparência; animações configuradas para corrida, salto, repouso, comemoração, impacto e queda.",
   "rendering": {
     "canvasWidth": 1280,
     "canvasHeight": 720,
@@ -12,7 +12,7 @@
   "characters": [
     {
       "id": "apprentice_01",
-      "folder": "assets/personagens/spritesheet-A01.svg",
+      "folder": "assets/personagens/aprendiz-A01.png",
       "states": [
         "idle",
         "run",
@@ -22,12 +22,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_02",
-      "folder": "assets/personagens/spritesheet-A02.svg",
+      "folder": "assets/personagens/aprendiz-A02.png",
       "states": [
         "idle",
         "run",
@@ -37,12 +38,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_03",
-      "folder": "assets/personagens/spritesheet-A03.svg",
+      "folder": "assets/personagens/aprendiz-A03.png",
       "states": [
         "idle",
         "run",
@@ -52,12 +54,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_04",
-      "folder": "assets/personagens/spritesheet-A04.svg",
+      "folder": "assets/personagens/aprendiz-A04.png",
       "states": [
         "idle",
         "run",
@@ -67,12 +70,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_05",
-      "folder": "assets/personagens/spritesheet-A05.svg",
+      "folder": "assets/personagens/aprendiz-A05.png",
       "states": [
         "idle",
         "run",
@@ -82,12 +86,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_06",
-      "folder": "assets/personagens/spritesheet-A06.svg",
+      "folder": "assets/personagens/aprendiz-A06.png",
       "states": [
         "idle",
         "run",
@@ -97,12 +102,13 @@
         "celebrate"
       ],
       "status": "available",
-      "format": "SVG spritesheet 6x3",
-      "frameSize": "96x96"
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_07",
-      "folder": "assets/characters/apprentice_07",
+      "folder": "assets/personagens/aprendiz-A07.png",
       "states": [
         "idle",
         "run",
@@ -111,11 +117,14 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_08",
-      "folder": "assets/characters/apprentice_08",
+      "folder": "assets/personagens/aprendiz-A08.png",
       "states": [
         "idle",
         "run",
@@ -124,11 +133,14 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_09",
-      "folder": "assets/characters/apprentice_09",
+      "folder": "assets/personagens/aprendiz-A09.png",
       "states": [
         "idle",
         "run",
@@ -137,11 +149,14 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     },
     {
       "id": "apprentice_10",
-      "folder": "assets/characters/apprentice_10",
+      "folder": "assets/personagens/aprendiz-A10.png",
       "states": [
         "idle",
         "run",
@@ -150,7 +165,10 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "PNG spritesheet horizontal 20 frames",
+      "frameSize": "72x84",
+      "sheetSize": "1440x84"
     }
   ],
   "backgrounds": [
