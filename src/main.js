@@ -83,6 +83,13 @@ const game = new Game(canvas, {
     msg.classList.add('show');
     setTimeout(() => msg.classList.remove('show'), 2600);
   },
+  onDifficulty: (level) => {
+    const labels = ['INICIANTE','EM EVOLUÇÃO','DESAFIO','AVANÇADO','ESPECIALISTA','MESTRE'];
+    const msg = $('#message');
+    msg.textContent = `📈 NÍVEL ${level + 1}: ${labels[level]} — A pista ficou mais desafiadora!`;
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2600);
+  },
   onBoss: (number) => {
     const msg = $('#message');
     msg.textContent = `🤖 CHEFE DO SETOR ${number}! PREPARE O SALTO!`;
