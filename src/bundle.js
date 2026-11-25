@@ -91,7 +91,7 @@ const CHARACTER_SPRITES = {
   }
 };
 
-for (const id of ['A02','A03','A04','A05','A06']) {
+for (const id of ['A02','A03','A04','A05','A06','A07','A08','A09','A10']) {
   CHARACTER_SPRITES[id] = { ...CHARACTER_SPRITES.A01, src: './assets/personagens/spritesheet-' + id + '.svg' };
 }
 
@@ -100,15 +100,14 @@ function createCharacterSprite(id = 'A01') {
   return config ? new SpriteAnimator(config) : null;
 }
 
-window.createCharacterSprite = createCharacterSprite;
-})();
-(()=>{
-const createCharacterSprite = window.createCharacterSprite;
 class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
+    this.campusBackground = new Image();
+    this.campusBackground.decoding = 'async';
+    this.campusBackground.src = './assets/cenarios/campus-senaipixel.svg';
     this.leaderSprite = createCharacterSprite('A01');
-    this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06'].map(id => [id, createCharacterSprite(id)]));
+    this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06','A07','A08','A09','A10'].map(id => [id, createCharacterSprite(id)]));
     this.ctx = canvas.getContext('2d');
     this.callbacks = callbacks;
     this.width = 1280; this.height = 720; this.ground = 555;
@@ -401,6 +400,23 @@ class Game {
     const idx = this.environmentIndex(), t = themes[idx];
     // Fase 1: pátio externo do SENAI, com escola, árvores, grade e calçada.
     if (idx === 0) {
+      if (this.campusBackground?.complete && this.campusBackground.naturalWidth > 0) {
+        c.imageSmoothingEnabled = false;
+        const drift = (this.frame * 0.12) % 32;
+        c.fillStyle = '#3d4b62'; c.fillRect(0, 0, this.width, this.height);
+        c.drawImage(this.campusBackground, -drift, -80, this.width + 32, this.height);
+        // Camada de rua no primeiro plano para alinhar o cenário ao chão da física.
+        c.fillStyle = '#3d4b62'; c.fillRect(0, this.ground, this.width, this.height - this.ground);
+        c.fillStyle = '#f47721'; c.fillRect(0, this.ground, this.width, 6);
+        c.fillStyle = '#f7f7f7';
+        for (let i = 0; i < 9; i++) {
+          const x = ((i * 190 - this.frame * this.speed * .85) % (this.width + 190) + this.width + 190) % (this.width + 190) - 90;
+          c.fillRect(x, 650, 92, 7);
+        }
+        c.fillStyle = '#10265bcc'; c.fillRect(18, 92, 250, 34);
+        c.fillStyle = '#ffffff'; c.font = 'bold 18px Arial'; c.fillText('FASE 1 · PÁTIO SENAI', 30, 115);
+        return;
+      }
       const sky = c.createLinearGradient(0,0,0,500);
       sky.addColorStop(0,'#42a9ed'); sky.addColorStop(1,'#d9f2ff');
       c.fillStyle=sky; c.fillRect(0,0,this.width,this.height);
@@ -631,7 +647,7 @@ class Game {
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
     const variant = Math.abs(Math.floor(phase * 17)) % 10;
-    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 5));
+    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 9));
     const sprite = leader ? this.leaderSprite : this.characterSprites?.[spriteId];
     const gait = Math.floor((phase * 5) % 6);
     const bob = Math.sin(this.frame * 0.24 + phase) * (this.isJumping ? 1.5 : 2.5);
@@ -775,7 +791,7 @@ class Game {
   }
 
   draw() {
-    const c = this.ctx; c.clearRect(0,0,this.width,this.height);
+    const c = this.ctx; c.imageSmoothingEnabled = false; c.clearRect(0,0,this.width,this.height);
     c.save();
     const shakeX = this.cameraShake ? (Math.random()-.5)*this.cameraShake : 0;
     const shakeY = this.cameraShake ? (Math.random()-.5)*this.cameraShake*.55 : 0;
@@ -1135,14 +1151,12 @@ class Game {
   }
 }
 
-window.Game = Game;
-})();
-(()=>{
-const Game = window.Game;
 const $ = (s) => document.querySelector(s);
 const canvas = $('#game'), overlay = $('#overlay'), results = $('#results'), quiz = $('#quiz');
 const startButton = $('#start'), jumpButton = $('#jump'), pauseButton = $('#pause');
 const environmentSelect = $('#environment-select');
+const menuPanel = $('#menu-panel'), menuPanelTitle = $('#menu-panel-title'), menuPanelContent = $('#menu-panel-content');
+const menuPanelClose = $('#menu-panel-close'), soundToggle = $('#sound-toggle');
 let questionIndex = 0, questionOpen = false, soundEnabled = true;
 let questionDeck = [];
 const questions = [
@@ -1202,8 +1216,90 @@ function checkAchievements(stats) {
 }
 const getBest = () => Number(safeStorage.get('ondaAprendizesRecord', '0')) || 0;
 $('#best-score').textContent = getBest().toLocaleString('pt-BR');
+const menuBest = $('#menu-best'), menuStars = $('#menu-stars');
+if (menuBest) menuBest.textContent = getBest().toLocaleString('pt-BR');
+if (menuStars) menuStars.textContent = unlockedAchievements.length + '/' + achievementList.length;
 const achievementCount = $('#achievement-count');
+
 if (achievementCount) achievementCount.textContent = unlockedAchievements.length;
+const sectorNames = ['Pátio do SENAI','Administração','Eletrônica','Informática','TI e Redes','Hardware','Laboratório'];
+function syncSectorButtons() {
+  document.querySelectorAll('.sector-choice').forEach(button => {
+    const selected = Number(button.dataset.env) === Number(environmentSelect.value);
+    button.classList.toggle('is-selected', selected);
+    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
+}
+function showMenuPanel(view) {
+  const best = getBest().toLocaleString('pt-BR');
+  const unlocked = unlockedAchievements.length;
+  const row = (title, description, status = '') => `<div class="menu-panel-row"><div><b>${title}</b><small>${description}</small></div><span class="menu-panel-status">${status}</span></div>`;
+  let content = '';
+  soundToggle.hidden = view !== 'settings';
+  if (view === 'missions') {
+    menuPanelTitle.textContent = 'MISSÕES E SETORES';
+    content = '<div class="menu-panel-list">' + sectorNames.map((name, index) =>
+      `<div class="menu-panel-row"><div><b>${String(index + 1).padStart(2, '0')} · ${name}</b><small>Corrida temática, obstáculos e desafios de informática</small></div><button class="menu-panel-action" style="width:auto;margin:0" data-play-sector="${index}" type="button">JOGAR</button></div>`
+    ).join('') + '</div>';
+  } else if (view === 'achievements') {
+    menuPanelTitle.textContent = 'CONQUISTAS';
+    content = '<p class="menu-panel-note">Desbloqueie conquistas durante as corridas. O progresso fica salvo neste dispositivo.</p><div class="menu-panel-list">' +
+      achievementList.map(a => row(a.label, a.detail, unlockedAchievements.includes(a.id) ? '✓ CONQUISTADA' : '🔒 BLOQUEADA')).join('') +
+      '</div><p class="menu-panel-note"><b>' + unlocked + ' de ' + achievementList.length + '</b> conquistas desbloqueadas.</p>';
+  } else if (view === 'ranking') {
+    menuPanelTitle.textContent = 'RANKING LOCAL';
+    content = row('SEU MELHOR RESULTADO', best + ' pontos registrados neste dispositivo', '🏆 RECORDE') +
+      '<p class="menu-panel-note">Este protótipo guarda o recorde no navegador atual. Um ranking entre turmas e dispositivos exige uma sala online com servidor, que ainda não está conectada.</p>';
+  } else if (view === 'settings') {
+    menuPanelTitle.textContent = 'CONFIGURAÇÕES';
+    content = '<div class="menu-panel-list">' +
+      row('COMPUTADOR', 'Espaço, seta para cima ou W para pular; Esc para pausar.', 'TECLADO') +
+      row('CELULAR / TABLET', 'Toque no botão PULAR ou na pista para saltar.', 'TOQUE') +
+      row('ORIENTAÇÃO', 'Experiência otimizada para tela horizontal; no retrato o menu se reorganiza.', 'RESPONSIVO') +
+      '</div><p class="menu-panel-note">A opção de som pode ser ligada ou desligada no botão abaixo.</p>';
+  } else {
+    menuPanelTitle.textContent = 'PERFIL DO APRENDIZ';
+    content = row('APRENDIZ SENAI', 'Perfil local deste navegador', 'NÍVEL 01') +
+      row('MELHOR PONTUAÇÃO', best + ' pontos', 'RECORDE') +
+      row('CONQUISTAS', unlocked + ' de ' + achievementList.length + ' desbloqueadas', '🏅');
+    content += '<p class="menu-panel-note">O perfil ainda não utiliza login nem sincronização entre dispositivos.</p>';
+  }
+  menuPanelContent.innerHTML = content;
+  menuPanel.hidden = false;
+  menuPanel.setAttribute('data-view', view);
+  menuPanelClose.focus();
+}
+function closeMenuPanel() {
+  menuPanel.hidden = true;
+  soundToggle.hidden = true;
+}
+document.querySelectorAll('[data-menu]').forEach(button => {
+  button.addEventListener('click', () => showMenuPanel(button.dataset.menu));
+});
+document.querySelectorAll('.sector-choice').forEach(button => {
+  button.addEventListener('click', () => {
+    environmentSelect.value = String(button.dataset.env);
+    syncSectorButtons();
+    const message = $('#message');
+    message.textContent = 'SETOR INICIAL: ' + sectorNames[Number(button.dataset.env)].toUpperCase();
+    message.classList.add('show');
+    window.setTimeout(() => message.classList.remove('show'), 1500);
+  });
+});
+menuPanelContent.addEventListener('click', event => {
+  const button = event.target.closest('[data-play-sector]');
+  if (!button) return;
+  environmentSelect.value = button.dataset.playSector;
+  syncSectorButtons();
+  closeMenuPanel();
+  beginGame();
+});
+menuPanelClose.addEventListener('click', closeMenuPanel);
+menuPanel.addEventListener('click', event => {
+  if (event.target === menuPanel) closeMenuPanel();
+});
+syncSectorButtons();
+
 
 function sound(kind) {
   if (!soundEnabled) return;
@@ -1334,6 +1430,9 @@ function showResults() {
   $('#result-summary').textContent = 'Missão concluída! Confira seu desempenho e tente superar sua marca.';
   $('#record-message').textContent = isRecord ? '🏆 NOVO RECORDE! Parabéns!' : `Seu melhor resultado: ${Math.max(previous,score).toLocaleString('pt-BR')} pontos`;
   $('#best-score').textContent = Math.max(previous,score).toLocaleString('pt-BR');
+  const menuBest = $('#menu-best'), menuStars = $('#menu-stars');
+  if (menuBest) menuBest.textContent = Math.max(previous,score).toLocaleString('pt-BR');
+  if (menuStars) menuStars.textContent = unlockedAchievements.length + '/' + achievementList.length;
   results.style.display = 'grid';
 }
 
@@ -1360,10 +1459,10 @@ startButton.style.touchAction = 'manipulation';
 window.__ondaStart = activateStart;
 startButton.addEventListener('click', activateStart);
 $('#again').addEventListener('click', beginGame);
-$('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
+$('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; syncSectorButtons(); });
 $('#sound-toggle').addEventListener('click', () => {
   soundEnabled = !soundEnabled;
-  $('#sound-toggle').textContent = soundEnabled ? '🔊 SOM: LIGADO' : '🔇 SOM: DESLIGADO';
+  soundToggle.textContent = soundEnabled ? '🔊 SOM: LIGADO' : '🔇 SOM: DESLIGADO';
   if (soundEnabled) sound('success');
 });
 const jumpStart = (event) => {
@@ -1378,7 +1477,7 @@ canvas.addEventListener('pointerdown', (event) => {
 
 window.addEventListener('keydown', (event) => {
   if (['Space','ArrowUp','KeyW'].includes(event.code)) { event.preventDefault(); if (!event.repeat) game.jump(); }
-  if (event.code === 'Escape') game.togglePause();
+  if (event.code === 'Escape') { if (!menuPanel.hidden) closeMenuPanel(); else game.togglePause(); }
 });
 pauseButton.addEventListener('click', () => game.togglePause());
 
