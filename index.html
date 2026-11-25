@@ -6,16 +6,16 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=32">
+  <link rel="stylesheet" href="./style.css?v=33">
 
 </head>
 <body>
   <main id="game-shell">
-    <header class="hud">
-      <div class="brand">ONDA DE <strong>APRENDIZES</strong><small>SENAI</small></div>
-      <div class="stat">DISTÂNCIA <b id="distance">0 m</b></div>
-      <div class="stat">TURMA <b id="crowd">1</b></div>
-      <div class="stat">PONTOS <b id="score">0</b></div>
+    <header class="hud" aria-label="Painel da corrida">
+      <div class="brand"><span class="brand-wave">🌊</span><span class="brand-words">ONDA DE <strong>APRENDIZES</strong><small>SENAI</small></span></div>
+      <div class="stat stat-distance"><span class="stat-icon">🏃</span><span class="stat-copy"><label>DISTÂNCIA</label><b id="distance">0 m</b></span></div>
+      <div class="stat stat-crowd"><span class="stat-icon">👥</span><span class="stat-copy"><label>TURMA</label><b id="crowd">1</b></span></div>
+      <div class="stat stat-score"><span class="stat-icon">⭐</span><span class="stat-copy"><label>PONTOS</label><b id="score">0</b></span></div>
       <button id="pause" class="hud-button" aria-label="Pausar">Ⅱ</button>
     </header>
 
@@ -23,21 +23,41 @@
 
     <section id="overlay" class="overlay menu-overlay" aria-label="Menu inicial Onda de Aprendizes">
       <div class="menu-art">
-        <img id="menu-reference-image" class="menu-reference-image" alt="Menu Onda de Aprendizes no campus SENAI">
-        <button id="start" class="menu-start-hit" type="button" aria-label="Começar o jogo"
-          onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">
-          <span>COMEÇAR</span>
-        </button>
-        <select id="environment-select" class="menu-sector-hit" aria-label="Escolher setor inicial">
-          <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
-          <option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option>
-        </select>
-        <button id="sound-toggle" class="menu-settings-hit" type="button" aria-label="Alternar sons" title="Alternar sons"></button>
+        <img id="menu-reference-image" class="menu-reference-image" alt="Menu Pixel Art do Onda de Aprendizes no campus SENAI">
+        <div class="menu-title-hit" aria-hidden="true"></div>
+        <button id="start" class="menu-hit menu-start-hit" type="button" aria-label="Começar o jogo"><span>COMEÇAR</span></button>
+        <button class="menu-hit menu-missions-hit" data-menu="missions" type="button" aria-label="Abrir missões"></button>
+        <button class="menu-hit menu-achievements-hit" data-menu="achievements" type="button" aria-label="Abrir conquistas"></button>
+        <button class="menu-hit menu-ranking-hit" data-menu="ranking" type="button" aria-label="Abrir ranking"></button>
+        <button class="menu-hit menu-settings-hit" data-menu="settings" type="button" aria-label="Abrir configurações"></button>
+        <div class="sector-board-live">
+          <div class="sector-heading">SETORES DO JOGO</div>
+          <div class="sector-list">
+            <button class="sector-choice" data-env="0" type="button">🏫 <span>Pátio do SENAI</span></button>
+            <button class="sector-choice" data-env="1" type="button">📋 <span>Administração</span></button>
+            <button class="sector-choice" data-env="2" type="button">🔌 <span>Eletrônica</span></button>
+            <button class="sector-choice" data-env="3" type="button">💻 <span>Informática</span></button>
+            <button class="sector-choice" data-env="4" type="button">🌐 <span>TI e Redes</span></button>
+            <button class="sector-choice" data-env="5" type="button">🔧 <span>Hardware</span></button>
+            <button class="sector-choice" data-env="6" type="button">⚗️ <span>Laboratório</span></button>
+          </div>
+        </div>
+        <button class="menu-profile-hit" data-menu="profile" type="button" aria-label="Ver perfil do aprendiz"></button>
       </div>
-      <div hidden>
-        <span id="best-score">0</span><span id="achievement-count">0</span>
-        <p id="achievement-summary">CONQUISTAS</p>
+      <select id="environment-select" class="visually-hidden" aria-label="Setor inicial">
+        <option value="0">Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option>
+        <option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option>
+      </select>
+      <div hidden><span id="best-score">0</span><span id="achievement-count">0</span><p id="achievement-summary">CONQUISTAS</p></div>
+      <div id="menu-panel" class="menu-panel" hidden role="dialog" aria-modal="true" aria-labelledby="menu-panel-title">
+        <div class="menu-panel-card">
+          <button id="menu-panel-close" class="menu-panel-close" type="button" aria-label="Fechar painel">✕</button>
+          <p class="menu-panel-eyebrow">ONDA DE APRENDIZES · SENAI</p>
+          <h2 id="menu-panel-title">MISSÕES</h2>
+          <div id="menu-panel-content"></div>
+        </div>
       </div>
+      <div id="menu-sound-holder" hidden><button id="sound-toggle" class="secondary" type="button">🔊 SOM: LIGADO</button></div>
     </section>
     <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
     <section id="quiz" class="overlay quiz-overlay" style="display:none">
@@ -83,6 +103,6 @@ window.addEventListener('unhandledrejection', function(e) {
   }
 })();
 </script>
-<script src="./src/bundle.js?v=36" defer></script>
+<script src="./src/bundle.js?v=37" defer></script>
 </body>
 </html>
