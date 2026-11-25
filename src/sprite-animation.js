@@ -68,8 +68,7 @@ export class SpriteAnimator {
 }
 
 /**
- * Exemplo de configuração. Os caminhos só serão ativados quando os PNGs
- * transparentes forem adicionados ao repositório.
+ * Seis personagens em spritesheets SVG com fundo transparente.
  */
 export const CHARACTER_SPRITES = {
   A01: {
@@ -86,6 +85,10 @@ export const CHARACTER_SPRITES = {
     }
   }
 };
+
+for (const id of ['A02','A03','A04','A05','A06']) {
+  CHARACTER_SPRITES[id] = { ...CHARACTER_SPRITES.A01, src: './assets/personagens/spritesheet-' + id + '.svg' };
+}
 
 export function createCharacterSprite(id = 'A01') {
   const config = CHARACTER_SPRITES[id];
