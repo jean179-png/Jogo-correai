@@ -47,7 +47,9 @@ export class SpriteAnimator {
     if (!this.loaded || this.failed) return false;
     const animation = this.animations[this.animation];
     if (!animation) return false;
-    const index = animation.frames[this.frame] ?? animation.frames[0];
+    const frameOffset = Math.abs(Math.floor(options.frameOffset || 0));
+    const frameIndex = (this.frame + frameOffset) % animation.frames.length;
+    const index = animation.frames[frameIndex] ?? animation.frames[0];
     const columns = Math.max(1, animation.columns || 1);
     const sx = (index % columns) * this.frameWidth;
     const sy = Math.floor(index / columns) * this.frameHeight;
