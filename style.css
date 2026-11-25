@@ -373,3 +373,48 @@ body{min-height:100svh;min-height:100dvh}
 }
 
 @media(max-aspect-ratio:1/1){.menu-bottom{display:none!important}.sector-board{top:69%;bottom:2%;overflow:hidden}.sector-board div{width:49%;}}
+
+
+/* Menu final — imagem de referência como composição visual integral */
+.menu-overlay{
+  display:grid!important;place-items:center!important;inset:0!important;
+  padding:0!important;overflow:hidden!important;background:#061d4d!important;
+}
+.menu-overlay .menu-art{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  width:min(100vw,177.7778dvh)!important;height:min(56.25vw,100dvh)!important;
+  aspect-ratio:16/9!important;transform:translate(-50%,-50%)!important;
+  overflow:hidden!important;background:none!important;z-index:1!important;filter:none!important;
+}
+.menu-reference-image{
+  position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;
+  max-width:none!important;object-fit:fill!important;image-rendering:auto!important;
+}
+.menu-start-hit{
+  position:absolute!important;left:34.2%!important;top:36.1%!important;width:31.5%!important;height:12.3%!important;
+  min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;
+  opacity:0!important;color:transparent!important;background:transparent!important;border:0!important;
+  box-shadow:none!important;border-radius:12px!important;z-index:5!important;
+  cursor:pointer!important;touch-action:manipulation!important;pointer-events:auto!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.menu-start-hit span{font-size:0!important;color:transparent!important}
+.menu-sector-hit{
+  position:absolute!important;left:72.2%!important;top:42%!important;width:24%!important;height:34%!important;
+  padding:0!important;margin:0!important;opacity:0!important;z-index:4!important;
+  border:0!important;background:transparent!important;color:transparent!important;
+  appearance:none!important;-webkit-appearance:none!important;cursor:pointer!important;
+}
+.menu-settings-hit{
+  position:absolute!important;right:1.2%!important;top:1.2%!important;width:5.5%!important;height:8.5%!important;
+  min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;
+  opacity:0!important;z-index:5!important;border:0!important;background:transparent!important;
+  box-shadow:none!important;cursor:pointer!important;touch-action:manipulation!important;
+}
+.menu-overlay [hidden]{display:none!important}
+.menu-overlay #message{z-index:10}
+@media(max-aspect-ratio:1/1){
+  .menu-overlay .menu-art{
+    width:min(100vw,177.7778dvh)!important;height:min(56.25vw,100dvh)!important;
+  }
+}
