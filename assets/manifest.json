@@ -1,7 +1,7 @@
 {
   "version": 2,
   "status": "planned",
-  "notes": "Seis spritesheets SVG de aprendizes disponíveis; demais personagens e assets permanecem planejados.",
+  "notes": "Dez spritesheets SVG de aprendizes disponíveis (A01–A10), com variações de paleta; cenários, obstáculos, coletáveis e interface são renderizados pelo motor 2D.",
   "rendering": {
     "canvasWidth": 1280,
     "canvasHeight": 720,
