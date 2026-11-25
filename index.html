@@ -55,10 +55,14 @@ canvas{display:block;width:100%;height:100%}.hud{position:absolute;z-index:2;top
         <h1>ONDA DE <span>APRENDIZES</span></h1>
         <p>A turma corre em formação maior, com pista em perspectiva, sensação de velocidade e reações visuais a impactos e aterrissagens.</p>
         <p class="instructions"><b>Equipe:</b> recrute aprendizes e conduza uma horda de até 110 personagens visíveis. Salte obstáculos, vença chefes e escolha rotas.<br><br><b>Computador:</b> Espaço, ↑ ou clique para pular.<br><b>Celular:</b> toque na tela ou no botão PULAR.</p>
+        <div class="menu-options"><label for="environment-select">ESCOLHA O AMBIENTE</label><select id="environment-select"><option value="0">Tecnologia</option><option value="1">Administração</option><option value="2">Eletrônica</option><option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option></select></div>
+        <p class="record-line">MELHOR PONTUAÇÃO: <span id="best-score">0</span></p>
+        <button id="sound-toggle" class="secondary">🔊 SOM: LIGADO</button>
         <button id="start" class="primary">COMEÇAR</button>
       </div>
     </section>
 
+    <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
     <section id="quiz" class="overlay quiz-overlay" style="display:none">
       <div class="dialog quiz-dialog">
         <p class="eyebrow">PORTÃO DE CONHECIMENTO · SENAI</p>
