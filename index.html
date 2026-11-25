@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=30">
+  <link rel="stylesheet" href="./style.css?v=31">
 
 </head>
 <body>
@@ -21,18 +21,42 @@
 
     <canvas id="game" width="1280" height="720" aria-label="Jogo Onda de Aprendizes"></canvas>
 
-    <section id="overlay" class="overlay">
-      <div class="dialog">
-        <p class="eyebrow">SENAI · ETAPA 24 · CONQUISTAS</p>
-        <h1>ONDA DE <span>APRENDIZES</span></h1>
-        <p>A turma corre em formação maior, com pista em perspectiva, sensação de velocidade e reações visuais a impactos e aterrissagens.</p>
-        <p class="instructions"><b>Equipe:</b> recrute aprendizes e conduza uma horda de até 110 personagens visíveis. Salte obstáculos, vença chefes e escolha rotas.<br><br><b>Computador:</b> Espaço, ↑ ou clique para pular.<br><b>Celular:</b> toque na tela ou no botão PULAR.</p>
-        <div class="menu-options"><label for="environment-select">ESCOLHA O AMBIENTE</label><select id="environment-select"><option value="0">Fase 1 — Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option><option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option></select></div>
-        <p class="record-line">MELHOR PONTUAÇÃO: <span id="best-score">0</span></p>
-        <p id="achievement-summary" class="achievement-summary">🏅 CONQUISTAS: <span id="achievement-count">0</span> / 7</p>
-        <button id="sound-toggle" class="secondary">🔊 SOM: LIGADO</button>
-        <button id="start" class="primary" type="button" onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">COMEÇAR</button>
+    <section id="overlay" class="overlay menu-overlay">
+      <div class="menu-art" aria-hidden="true"></div>
+      <div class="menu-profile"><span class="profile-avatar">A</span><span><b>ÁREA DO APRENDIZ</b><small>JOGO EDUCATIVO SENAI</small></span></div>
+      <div class="menu-topnote"><span>✦</span> APRENDA JOGANDO <span>✦</span></div>
+
+      <div class="menu-title">
+        <h1>ONDA DE <strong>APRENDIZES</strong></h1>
+        <span class="menu-title-brand">SENAI</span>
       </div>
+
+      <div class="menu-center">
+        <button id="start" class="primary menu-start" type="button" onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}"><span>▶</span> COMEÇAR</button>
+        <div class="menu-shortcuts" aria-label="Recursos do jogo">
+          <div class="menu-shortcut"><span>▣</span><b>MISSÕES</b><small>DESAFIOS DE INFORMÁTICA</small></div>
+          <div class="menu-shortcut"><span>🏆</span><b>CONQUISTAS</b><small id="achievement-summary"> <span id="achievement-count">0</span> / 7 DESBLOQUEADAS</small></div>
+          <div class="menu-shortcut"><span>▥</span><b>RECORDE</b><small><span id="best-score">0</span> PONTOS</small></div>
+        </div>
+        <div class="menu-tools">
+          <div class="menu-options"><label for="environment-select">ESCOLHA O SETOR INICIAL</label><select id="environment-select"><option value="0">Fase 1 — Pátio do SENAI</option><option value="1">Administração</option><option value="2">Eletrônica</option><option value="3">Informática</option><option value="4">TI e Redes</option><option value="5">Hardware</option><option value="6">Laboratório</option></select></div>
+          <button id="sound-toggle" class="secondary menu-sound">🔊 SOM: LIGADO</button>
+        </div>
+        <p class="menu-controls">COMPUTADOR: ESPAÇO / ↑ PARA PULAR&nbsp;&nbsp; • &nbsp;&nbsp;CELULAR: TOQUE NA TELA</p>
+      </div>
+
+      <aside class="sector-board">
+        <h2>SETORES DO JOGO</h2>
+        <div><span>♟</span> Pátio do SENAI</div>
+        <div><span>▤</span> Administração</div>
+        <div><span>▦</span> Eletrônica</div>
+        <div><span>▣</span> Informática</div>
+        <div><span>⌘</span> TI e Redes</div>
+        <div><span>🔧</span> Hardware</div>
+        <div><span>⚗</span> Laboratório</div>
+      </aside>
+
+      <div class="menu-bottom"><b>CORRA, APRENDA, RESOLVA DESAFIOS</b><span>E CONQUISTE <strong>NOVOS NÍVEIS!</strong></span></div>
     </section>
 
     <section id="results" class="overlay" style="display:none"><div class="dialog"><p class="eyebrow">RESULTADO · SENAI</p><h1>FIM DE <span>JOGO</span></h1><p id="result-summary">Confira seu desempenho.</p><div class="result-grid"><div><small>DISTÂNCIA</small><b id="result-distance">0 m</b></div><div><small>TURMA</small><b id="result-crowd">0</b></div><div><small>PONTOS</small><b id="result-score">0</b></div></div><p id="record-message" class="record-line"></p><button id="again" class="primary">JOGAR NOVAMENTE</button><br><button id="back-menu" class="secondary">VOLTAR AO MENU</button></div></section>
@@ -61,6 +85,6 @@ window.addEventListener('unhandledrejection', function(e) {
   if(box){box.textContent='ERRO DE INICIALIZAÇÃO: '+(e.reason && e.reason.message ? e.reason.message : String(e.reason));box.classList.add('show');}
 });
 </script>
-<script src="./src/bundle.js?v=34" defer></script>
+<script src="./src/bundle.js?v=35" defer></script>
 </body>
 </html>
