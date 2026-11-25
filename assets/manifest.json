@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "planned",
-  "notes": "Manifesto inicial. Os caminhos são destinos planejados; não representam arquivos de arte já existentes.",
+  "notes": "Seis spritesheets SVG de aprendizes disponíveis; demais personagens e assets permanecem planejados.",
   "rendering": {
     "canvasWidth": 1280,
     "canvasHeight": 720,
@@ -12,7 +12,7 @@
   "characters": [
     {
       "id": "apprentice_01",
-      "folder": "assets/characters/apprentice_01",
+      "folder": "assets/personagens/spritesheet-A01.svg",
       "states": [
         "idle",
         "run",
@@ -21,11 +21,13 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_02",
-      "folder": "assets/characters/apprentice_02",
+      "folder": "assets/personagens/spritesheet-A02.svg",
       "states": [
         "idle",
         "run",
@@ -34,11 +36,13 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_03",
-      "folder": "assets/characters/apprentice_03",
+      "folder": "assets/personagens/spritesheet-A03.svg",
       "states": [
         "idle",
         "run",
@@ -47,11 +51,13 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_04",
-      "folder": "assets/characters/apprentice_04",
+      "folder": "assets/personagens/spritesheet-A04.svg",
       "states": [
         "idle",
         "run",
@@ -60,11 +66,13 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_05",
-      "folder": "assets/characters/apprentice_05",
+      "folder": "assets/personagens/spritesheet-A05.svg",
       "states": [
         "idle",
         "run",
@@ -73,11 +81,13 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_06",
-      "folder": "assets/characters/apprentice_06",
+      "folder": "assets/personagens/spritesheet-A06.svg",
       "states": [
         "idle",
         "run",
@@ -86,7 +96,9 @@
         "hit",
         "celebrate"
       ],
-      "status": "pending"
+      "status": "available",
+      "format": "SVG spritesheet 6x3",
+      "frameSize": "96x96"
     },
     {
       "id": "apprentice_07",
