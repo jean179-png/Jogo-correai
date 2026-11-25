@@ -229,3 +229,145 @@ body{min-height:100svh;min-height:100dvh}
 #overlay .dialog #start{position:relative;z-index:30;pointer-events:auto;touch-action: manipulation;-webkit-user-select:none;user-select:none;}
 #start:active,#start.is-pressed{transform:translateY(3px);filter:brightness(1.2);box-shadow:0 2px 0 #a7470c;}
 #overlay .dialog{isolation:isolate;}
+
+
+/* Menu visual — composição inspirada na referência pixel-art do SENAI */
+.menu-overlay{
+  display:block!important;inset:0;padding:0!important;overflow:hidden!important;
+  background:#0878dc!important;color:#fff;
+}
+.menu-art{
+  position:absolute;inset:0;background-image:linear-gradient(90deg,#001d4b18,#001d4b05 45%,#001d4b48),url("./assets/menu-campus.svg");
+  background-position:center;background-size:cover;background-repeat:no-repeat;
+  image-rendering:pixelated;
+}
+.menu-overlay:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,#063c8d30 0%,transparent 30%,#071d3d1c 72%,#061b3e88 100%);
+}
+.menu-profile,.menu-topnote,.menu-title,.menu-center,.sector-board,.menu-bottom{position:absolute;z-index:2}
+.menu-profile{
+  top:2.2%;left:1.5%;display:flex;align-items:center;gap:10px;min-width:245px;
+  padding:9px 13px 9px 9px;border:3px solid #fff;border-radius:15px;
+  background:linear-gradient(120deg,#06377fef,#0757b9ed);box-shadow:0 5px 0 #082451,0 9px 20px #00152f70;
+}
+.profile-avatar{
+  display:grid;place-items:center;width:54px;height:54px;border:3px solid #49d5ff;border-radius:10px;
+  background:linear-gradient(135deg,#ffd89b,#bd7745);color:#10265b;font-size:31px;font-weight:1000;
+  text-shadow:1px 1px #fff;
+}
+.menu-profile b{display:block;font-size:14px;letter-spacing:.6px}
+.menu-profile small{display:block;margin-top:4px;color:#bceaff;font-size:10px;font-weight:900;letter-spacing:1px}
+.menu-topnote{
+  top:3.5%;left:50%;transform:translateX(-50%);font-size:12px;font-weight:1000;letter-spacing:2px;
+  color:#e9f8ff;text-shadow:0 2px 3px #06306d;white-space:nowrap;
+}
+.menu-topnote span{color:#ffd34d}
+.menu-title{
+  top:5.5%;left:28%;width:47%;text-align:center;transform:rotate(-1deg);
+  filter:drop-shadow(0 7px 0 #082451);
+}
+.menu-title h1{
+  margin:0;color:#fff;font-size:clamp(32px,5.1vw,78px);line-height:.94;font-weight:1000;
+  letter-spacing:-2px;-webkit-text-stroke:2px #082451;
+  text-shadow:3px 3px 0 #082451,6px 6px 0 #0872d9;
+}
+.menu-title h1 strong{display:block;color:#ff9a19;-webkit-text-stroke:2px #713708;text-shadow:3px 3px 0 #713708,6px 6px 0 #082451}
+.menu-title-brand{
+  display:inline-block;margin-top:7px;padding:5px 32px;background:#06469d;border:3px solid #fff;
+  border-radius:6px;color:#fff;font-size:clamp(18px,2.2vw,32px);font-weight:1000;font-style:italic;
+  letter-spacing:4px;box-shadow:0 5px 0 #082451;
+}
+.menu-center{
+  left:38%;top:40%;width:27%;display:grid;gap:9px;
+}
+.menu-start{
+  width:100%;min-height:76px;display:flex;align-items:center;justify-content:center;gap:15px;
+  border:4px solid #efffe7;border-radius:15px;color:#fff!important;
+  background:linear-gradient(180deg,#79e32b,#27a600)!important;
+  box-shadow:0 7px 0 #12620b,0 10px 18px #00152f66!important;
+  font-size:clamp(21px,2.5vw,37px)!important;font-weight:1000;letter-spacing:1px;
+  text-shadow:2px 3px 0 #17570b;-webkit-text-stroke:.5px #174d08;
+}
+.menu-start span{font-size:.9em}
+.menu-start:active,.menu-start.is-pressed{transform:translateY(4px);filter:brightness(1.12)}
+.menu-shortcuts{display:grid;gap:7px}
+.menu-shortcut{
+  min-height:51px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:1fr 1fr;
+  align-items:center;padding:5px 12px;border:3px solid #e7f8ff;border-radius:12px;
+  background:linear-gradient(180deg,#0879d8,#063a8f);box-shadow:0 4px 0 #06265b,0 5px 12px #00152f55;
+}
+.menu-shortcut>span{grid-row:1/3;font-size:27px;text-align:center;color:#ffda3b;text-shadow:1px 2px #06265b}
+.menu-shortcut b{align-self:end;font-size:clamp(13px,1.45vw,19px);letter-spacing:.5px;text-shadow:1px 2px #06265b}
+.menu-shortcut small{align-self:start;font-size:9px;color:#bdeaff;font-weight:900;letter-spacing:.8px}
+.menu-tools{display:grid;grid-template-columns:1fr auto;align-items:end;gap:8px}
+.menu-tools .menu-options{max-width:none;min-width:0;margin:0;gap:4px}
+.menu-tools .menu-options label{color:#fff;font-size:9px;text-shadow:0 1px 3px #001b50}
+.menu-tools .menu-options select{min-height:42px;padding:7px 9px;border:2px solid #fff;border-radius:9px;font-size:12px}
+.menu-sound{min-height:42px!important;padding:8px 10px!important;white-space:nowrap;background:#062f76eF!important;border:2px solid #d9f5ff!important;box-shadow:0 3px 0 #041c4a}
+.menu-controls{margin:0!important;text-align:center;color:#fff!important;font-size:9px!important;font-weight:900;letter-spacing:.6px;text-shadow:0 2px 4px #001b50}
+.sector-board{
+  top:36%;right:1.5%;width:18%;padding:11px 13px 13px;
+  border:4px solid #fff;border-radius:12px;background:linear-gradient(180deg,#084b9beF,#06265df2);
+  box-shadow:0 6px 0 #071c46,0 12px 22px #00152f77;
+}
+.sector-board h2{
+  margin:-1px -3px 9px;padding:9px 5px;text-align:center;border:2px solid #7d4100;border-radius:7px;
+  background:linear-gradient(#ffd75a,#f5a51b);color:#17264a;font-size:clamp(12px,1.3vw,18px);
+  font-weight:1000;letter-spacing:.4px;text-shadow:0 1px #fff;
+}
+.sector-board div{
+  display:flex;align-items:center;gap:10px;min-height:41px;padding:4px 5px;
+  border-bottom:2px solid #53b9ef55;color:#fff;font-size:clamp(11px,1.1vw,16px);font-weight:900;
+  text-shadow:1px 2px #06265b;
+}
+.sector-board div:last-child{border:0}
+.sector-board div span{display:inline-grid;place-items:center;width:28px;color:#8de7ff;font-size:22px}
+.menu-bottom{
+  left:24%;bottom:2%;width:54%;padding:11px 18px;text-align:center;
+  border:4px solid #48c5ff;border-radius:15px;background:linear-gradient(100deg,#052c72f5,#073c90f5);
+  box-shadow:0 5px 0 #031b4c,0 9px 20px #00152f70;transform:skew(-5deg);
+}
+.menu-bottom b,.menu-bottom span{display:block;font-weight:1000;font-size:clamp(12px,1.55vw,21px);font-style:italic;text-shadow:2px 2px #041a47;line-height:1.15}
+.menu-bottom strong{color:#ffe229}
+.menu-overlay #message{z-index:10}
+.menu-overlay .menu-shortcut #achievement-summary{margin:0!important;padding:0!important;border:0!important;background:none!important;max-width:none;color:#bdeaff!important;font-size:9px!important;letter-spacing:.5px}
+.menu-overlay .menu-shortcut #achievement-summary span{color:#fff}
+@media(max-width:1050px) and (min-aspect-ratio:1/1){
+  .menu-title{left:25%;width:52%;top:7%}
+  .menu-center{left:36%;width:31%;top:42%}
+  .sector-board{right:1%;width:19%;top:39%;padding:8px}
+  .sector-board div{min-height:35px}
+  .menu-bottom{left:20%;width:59%}
+  .menu-profile{min-width:190px;padding:6px}
+  .profile-avatar{width:42px;height:42px}
+}
+@media(max-aspect-ratio:1/1){
+  .menu-overlay{position:absolute!important;inset:0!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0!important}
+  .menu-art{background-position:35% center;background-size:auto 100%;opacity:.95}
+  .menu-overlay:after{background:linear-gradient(180deg,#063c8d20,#061b3ecc 55%,#061b3ef5)}
+  .menu-profile{display:none}
+  .menu-topnote{top:1.5%;font-size:9px;letter-spacing:1px}
+  .menu-title{top:5%;left:4%;width:92%;transform:none}
+  .menu-title h1{font-size:clamp(29px,8vw,48px);letter-spacing:-1px}
+  .menu-title-brand{font-size:18px;margin-top:4px;padding:3px 25px}
+  .menu-center{left:5%;top:27%;width:90%;gap:6px}
+  .menu-start{min-height:54px;font-size:24px!important}
+  .menu-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .menu-shortcut{min-height:53px;grid-template-columns:25px 1fr;padding:4px}
+  .menu-shortcut>span{font-size:19px}
+  .menu-shortcut b{font-size:10px}
+  .menu-shortcut small{font-size:7px;letter-spacing:0}
+  .menu-tools{grid-template-columns:1fr;gap:5px}
+  .menu-tools .menu-options label{font-size:9px}
+  .menu-tools .menu-options select{min-height:40px}
+  .menu-sound{min-height:38px!important}
+  .menu-controls{font-size:8px!important}
+  .sector-board{top:70%;left:5%;right:5%;width:90%;padding:6px 9px}
+  .sector-board h2{margin:0 0 3px;padding:5px;font-size:12px}
+  .sector-board div{display:inline-flex;width:49%;min-height:25px;gap:5px;padding:2px 4px;font-size:10px;border-bottom:1px solid #53b9ef55}
+  .sector-board div span{width:18px;font-size:15px}
+  .menu-bottom{left:5%;bottom:1%;width:90%;padding:6px 7px;border-width:2px}
+  .menu-bottom b,.menu-bottom span{font-size:10px}
+  .menu-overlay #message{bottom:2px;max-width:calc(100% - 110px)}
+}
