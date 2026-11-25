@@ -187,29 +187,21 @@ function showResults() {
   results.style.display = 'grid';
 }
 
-let lastStartActivation = 0;
 function activateStart(event) {
-  if (event && event.cancelable) event.preventDefault();
-  const now = Date.now();
-  if (now - lastStartActivation < 650) return;
-  lastStartActivation = now;
-  try { beginGame(); } catch (error) {
+  if (event) event.preventDefault();
+  try {
+    beginGame();
+  } catch (error) {
     console.error('Falha ao iniciar o jogo:', error);
     const msg = $('#message');
-    msg.textContent = 'Não foi possível iniciar. Atualize a página e tente novamente.';
+    msg.textContent = `Erro ao iniciar: ${error?.message || 'falha desconhecida'}`;
     msg.classList.add('show');
     overlay.style.display = 'grid';
   }
 }
 startButton.type = 'button';
 startButton.style.touchAction = 'manipulation';
-startButton.addEventListener('pointerup', (event) => {
-  if (event.pointerType === 'mouse' && event.button !== 0) return;
-  activateStart(event);
-}, { passive: false });
-startButton.addEventListener('click', (event) => {
-  if (event.detail === 0) activateStart(event);
-});
+startButton.addEventListener('click', activateStart);
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
