@@ -163,15 +163,19 @@ export class Game {
         ['pc_case','motherboard','fan'],   // Hardware
         ['labcart','microscope','cabinet'] // Laboratório
       ][this.environmentIndex()];
-      const types = [...common, ...themed];
+      // Evita buracos em sequência: mantém distância segura entre saltos.
+      const pitReady = this.distance - (this.lastPitDistance ?? -9999) > 520;
+      const availableCommon = pitReady ? common : common.filter(t => t !== 'pit');
+      const types = [...availableCommon, ...themed];
       const last = this.lastObstacleType;
       let pool = types.filter(t => t !== last);
       const type = pool[Math.floor(Math.random() * pool.length)];
       this.lastObstacleType = type;
-      const widths = {pit:125,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68};
+      if (type === 'pit') this.lastPitDistance = this.distance;
+      const widths = {pit:112,crate:58,barrier:88,cone:48,chair:62,gate:92,toolbox:68,tire:58,sign:54,cable:104,monitor:66,pallet:82,car:145,server:82,drone:66,cabinet:76,officebox:62,battery:60,circuit:78,coil:62,hacker:74,computer:82,router:66,antenna:72,pc_case:76,motherboard:82,fan:62,labcart:94,microscope:68};
       const damage = type === 'pit' || type === 'gate' || type === 'barrier' || type === 'car' ? 2 : 1;
       this.obstacles.push({ x: 1320, type, damage, w: widths[type], passed: false });
-      this.spawnTimer = 76 + Math.random() * 62;
+      this.spawnTimer = 105 + Math.random() * 70;
     }
     if (--this.recruitTimer <= 0) {
       // Pequenos grupos de aprendizes surgem juntos, no estilo de horda do runner.
