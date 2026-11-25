@@ -48,19 +48,20 @@ const achievementList = [
   {id:'crowd100',label:'Grande equipe',detail:'Reúna 100 aprendizes',test:s=>s.crowd>=100},
   {id:'score1000',label:'Pontuação de destaque',detail:'Faça 1.000 pontos',test:s=>s.score>=1000}
 ];
+const safeStorage = { get(key, fallback = null) { try { const value = localStorage.getItem(key); return value === null ? fallback : value; } catch (_) { return fallback; } }, set(key, value) { try { localStorage.setItem(key, value); return true; } catch (_) { return false; } } };
 let unlockedAchievements = [];
-try { unlockedAchievements = JSON.parse(localStorage.getItem('ondaAprendizesAchievements') || '[]'); } catch (_) {}
+try { unlockedAchievements = JSON.parse(safeStorage.get('ondaAprendizesAchievements', '[]')); } catch (_) { unlockedAchievements = []; }
 function checkAchievements(stats) {
   const next = achievementList.find(a => !unlockedAchievements.includes(a.id) && a.test(stats));
   if (!next) return;
   unlockedAchievements.push(next.id);
-  localStorage.setItem('ondaAprendizesAchievements', JSON.stringify(unlockedAchievements));
+  safeStorage.set('ondaAprendizesAchievements', JSON.stringify(unlockedAchievements));
   const msg = $('#message');
   msg.textContent = `🏅 CONQUISTA: ${next.label} — ${next.detail}!`;
   msg.classList.add('show');
   setTimeout(() => msg.classList.remove('show'), 3000);
 }
-const getBest = () => Number(localStorage.getItem('ondaAprendizesRecord') || 0);
+const getBest = () => Number(safeStorage.get('ondaAprendizesRecord', '0')) || 0;
 $('#best-score').textContent = getBest().toLocaleString('pt-BR');
 const achievementCount = $('#achievement-count');
 if (achievementCount) achievementCount.textContent = unlockedAchievements.length;
@@ -169,7 +170,7 @@ function beginGame() {
 function showResults() {
   const distance = Math.floor(game.distance), score = game.score;
   const previous = getBest(), isRecord = score > previous;
-  if (isRecord) localStorage.setItem('ondaAprendizesRecord', String(score));
+  if (isRecord) safeStorage.set('ondaAprendizesRecord', String(score));
   $('#result-distance').textContent = `${distance} m`;
   $('#result-crowd').textContent = game.crowd;
   $('#result-score').textContent = score.toLocaleString('pt-BR');
@@ -179,7 +180,23 @@ function showResults() {
   results.style.display = 'grid';
 }
 
-startButton.addEventListener('click', beginGame);
+let lastStartActivation = 0;
+function activateStart(event) {
+  if (event && event.cancelable) event.preventDefault();
+  const now = Date.now();
+  if (now - lastStartActivation < 650) return;
+  lastStartActivation = now;
+  try { beginGame(); } catch (error) {
+    console.error('Falha ao iniciar o jogo:', error);
+    const msg = $('#message');
+    msg.textContent = 'Não foi possível iniciar. Atualize a página e tente novamente.';
+    msg.classList.add('show');
+    overlay.style.display = 'grid';
+  }
+}
+startButton.addEventListener('click', activateStart);
+startButton.addEventListener('pointerup', activateStart, { passive: false });
+startButton.addEventListener('touchend', activateStart, { passive: false });
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
