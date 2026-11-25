@@ -187,8 +187,14 @@ function showResults() {
   results.style.display = 'grid';
 }
 
+let startActivationAt = 0;
 function activateStart(event) {
   if (event) event.preventDefault();
+  const now = Date.now();
+  if (now - startActivationAt < 700) return;
+  startActivationAt = now;
+  startButton.classList.add('is-pressed');
+  setTimeout(() => startButton.classList.remove('is-pressed'), 220);
   try {
     beginGame();
   } catch (error) {
@@ -202,6 +208,11 @@ function activateStart(event) {
 startButton.type = 'button';
 startButton.style.touchAction = 'manipulation';
 startButton.addEventListener('click', activateStart);
+// Android e navegadores móveis: tratar toque diretamente, sem depender do click sintetizado.
+startButton.addEventListener('touchend', activateStart, { passive: false });
+startButton.addEventListener('pointerup', (event) => {
+  if (event.pointerType === 'touch') activateStart(event);
+});
 $('#again').addEventListener('click', beginGame);
 $('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
 $('#sound-toggle').addEventListener('click', () => {
