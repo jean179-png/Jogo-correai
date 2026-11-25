@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" shape-rendering="crispEdges">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#188ff0"/><stop offset="1" stop-color="#a8e5ff"/></linearGradient>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#c7d8e9"/></linearGradient>
+ <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#bff3ff"/><stop offset="1" stop-color="#247fca"/></linearGradient>
+ <pattern id="pave" width="76" height="38" patternUnits="userSpaceOnUse"><path d="M0 0H76M0 0V38" stroke="#a6b7c8" stroke-width="2" opacity=".45" fill="none"/></pattern>
+</defs>
+<rect width="1280" height="720" fill="url(#sky)"/>
+<!-- nuvens -->
+<g fill="#fff" opacity=".94"><path d="M100 100h58V80h45v20h34v24H100zM770 82h52V62h45v20h38v22H770zM1080 150h55v-22h44v22h40v24h-139z"/></g>
+<!-- prédios distantes -->
+<g fill="#8bb9dc" stroke="#538bc0" stroke-width="5" opacity=".8"><path d="M0 430V280h92v-65h82v215zM174 430V240h80v-52h98v242zM904 430V265h95v-70h65v235zM1100 430V225h75v-55h100v260z"/></g>
+<g fill="#d9efff"><path d="M23 315h18v24H23zM61 315h18v24H61zM194 273h21v27h-21zM234 273h21v27h-21zM944 304h22v28h-22zM982 304h22v28h-22zM1125 260h20v24h-20zM1163 260h20v24h-20z"/></g>
+<!-- escola -->
+<path d="M190 490V300h254v190z" fill="url(#wall)" stroke="#174b91" stroke-width="10"/>
+<path d="M170 307l147-84h155v34H328l-138 78z" fill="#064bb0" stroke="#fff" stroke-width="7"/>
+<path d="M435 490V250l144-92h383v332z" fill="url(#wall)" stroke="#174b91" stroke-width="11"/>
+<path d="M412 257l163-105h402v35H584L436 287z" fill="#0856bf" stroke="#fff" stroke-width="7"/>
+<path d="M570 486V230l111-70h180v326z" fill="#e9f4fc" stroke="#174b91" stroke-width="9"/>
+<path d="M548 236l130-84h195v31H688L570 265z" fill="#0752b8" stroke="#fff" stroke-width="7"/>
+<!-- janelas -->
+<g fill="url(#glass)" stroke="#155398" stroke-width="7">
+ <path d="M220 335h66v76h-66zM309 335h66v76h-66zM398 335h66v76h-66z"/>
+ <path d="M478 265h61v69h-61zM561 265h61v69h-61zM644 265h61v69h-61zM727 265h61v69h-61zM810 265h61v69h-61z"/>
+ <path d="M468 374h67v71h-67zM563 374h67v71h-67zM658 374h67v71h-67zM753 374h67v71h-67zM848 374h67v71h-67z"/>
+</g>
+<g stroke="#e7f7ff" stroke-width="5"><path d="M253 335v76M342 335v76M431 335v76M508 265v69M591 265v69M674 265v69M757 265v69M840 265v69M501 374v71M596 374v71M691 374v71M786 374v71M881 374v71"/></g>
+<!-- letreiro SENAI -->
+<path d="M612 186h180v56H612z" fill="#06449b" stroke="#fff" stroke-width="6"/>
+<text x="702" y="225" text-anchor="middle" fill="#fff" font-family="Arial Black,Arial" font-size="38" font-style="italic" font-weight="900">SENAI</text>
+<!-- porta de entrada -->
+<path d="M638 423h137v88H638z" fill="#073976" stroke="#fff" stroke-width="8"/>
+<path d="M653 439h107v72H653z" fill="url(#glass)" stroke="#14549a" stroke-width="5"/>
+<path d="M706 439v72M653 475h107" stroke="#dff7ff" stroke-width="5"/>
+<!-- árvores pixelizadas -->
+<g><path d="M56 524h28V393H56z" fill="#765035"/><path d="M18 414h47v-34h42v-36h40v50h32v48H18z" fill="#23823a"/><path d="M0 382h56v-33h47v-34h46v45h40v56H0z" fill="#42b848"/><path d="M26 366h41v-29h37v25h35v36H26z" fill="#83df3c"/></g>
+<g transform="translate(1030 12)"><path d="M70 515h28V390H70z" fill="#765035"/><path d="M34 418h44v-36h45v-32h43v46h34v50H34z" fill="#23823a"/><path d="M0 384h55v-39h47v-35h51v46h44v54H0z" fill="#43bb49"/><path d="M33 366h40v-30h37v25h40v38H33z" fill="#82de3b"/></g>
+<g transform="translate(285 35)"><path d="M45 490h28V402H45z" fill="#765035"/><path d="M6 422h52v-37h48v44h32v42H6z" fill="#248b3c"/><path d="M0 391h44v-36h43v-29h45v43h38v48H0z" fill="#52c24c"/></g>
+<g transform="translate(872 46)"><path d="M28 455h24V382H28z" fill="#765035"/><path d="M0 397h45v-35h40v37h30v44H0z" fill="#228a3b"/><path d="M0 367h47v-30h40v36h32v45H0z" fill="#5ac64b"/></g>
+<!-- cerca -->
+<path d="M0 520h1280v10H0zM0 563h1280v9H0z" fill="#f5faff" stroke="#174a86" stroke-width="4"/>
+<g fill="#eaf4fc" stroke="#174a86" stroke-width="4"><path d="M18 507h9v70h-9zM75 507h9v70h-9zM132 507h9v70h-9zM189 507h9v70h-9zM246 507h9v70h-9zM303 507h9v70h-9zM360 507h9v70h-9zM417 507h9v70h-9zM474 507h9v70h-9zM531 507h9v70h-9zM588 507h9v70h-9zM645 507h9v70h-9zM702 507h9v70h-9zM759 507h9v70h-9zM816 507h9v70h-9zM873 507h9v70h-9zM930 507h9v70h-9zM987 507h9v70h-9zM1044 507h9v70h-9zM1101 507h9v70h-9zM1158 507h9v70h-9zM1215 507h9v70h-9z"/></g>
+<!-- calçada e pista -->
+<path d="M0 577h1280v62H0z" fill="#e8c08a"/><path d="M0 577h1280v62H0z" fill="url(#pave)"/>
+<path d="M0 635h1280v85H0z" fill="#3d4b62"/>
+<path d="M0 635h1280v8H0z" fill="#f47721"/>
+<g fill="#f8f6e5"><path d="M25 674h76v7H25zM195 674h76v7h-76zM365 674h76v7h-76zM535 674h76v7h-76zM705 674h76v7h-76zM875 674h76v7h-76zM1045 674h76v7h-76zM1215 674h50v7h-50z"/></g>
+<g fill="#91a8bd" opacity=".6"><path d="M0 706h1280v4H0zM180 644h4v76h-4zM470 644h4v76h-4zM760 644h4v76h-4zM1050 644h4v76h-4z"/></g>
+<!-- detalhes de jardim -->
+<g fill="#279543"><path d="M0 586h60v14H0zM160 590h45v12h-45zM350 589h55v12h-55zM930 590h60v12h-60zM1150 587h75v15h-75z"/></g>
+</svg>
