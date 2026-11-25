@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Campus SENAI em estilo pixel art">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#0788f5"/><stop offset=".65" stop-color="#55c8ff"/><stop offset="1" stop-color="#d9f6ff"/></linearGradient>
+ <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#b8edff"/><stop offset="1" stop-color="#287bc5"/></linearGradient>
+ <linearGradient id="walk" x2="0" y2="1"><stop stop-color="#ffe2a1"/><stop offset="1" stop-color="#c88e50"/></linearGradient>
+ <pattern id="pixels" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 0h9v9H0z" fill="#fff" opacity=".045"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/>
+<path d="M0 575L1600 505V900H0Z" fill="#4d9a44"/>
+<g fill="#fff" opacity=".82"><path d="M160 155h110v25H160zM205 125h50v30h-50zM1190 110h160v24h-160zM1260 80h90v30h-90z"/></g>
+<g fill="#236fbd"><path d="M0 500V355l190-92 170 66v170z"/><path d="M1120 525V230l210-125 270 76v344z"/></g>
+<g fill="#f2f6ff" stroke="#173e83" stroke-width="12"><path d="M430 520V392l150-86 185 40v174z"/><path d="M950 545V270l180-110 230 36v326z"/></g>
+<g fill="url(#glass)" stroke="#154d91" stroke-width="10">
+ <path d="M455 408l125-72v160H455z"/><path d="M600 335l145 24v141H600z"/>
+ <path d="M980 292l132-80v287H980z"/><path d="M1130 211l197 30v258h-197z"/>
+</g>
+<g stroke="#fff" stroke-width="9" opacity=".85"><path d="M520 380v116M672 355v145M1045 252v272M1200 220v285M980 390h350"/></g>
+<path d="M1090 180h340v100h-340z" fill="#0755c8" stroke="#fff" stroke-width="10"/>
+<text x="1260" y="247" fill="#fff" font-size="66" font-family="Arial,sans-serif" font-weight="900" text-anchor="middle" font-style="italic">SENAI</text>
+<g fill="#247a35"><path d="M0 470V260h55V210h42v-65h70v65h44v55h44v205z"/><path d="M1335 545V375h48v-58h62v-66h78v66h42v228z"/></g>
+<g fill="#46b83b"><path d="M0 265h70v-50h55v50h70v70h-45v55H65v-50H0z"/><path d="M1385 350h65v-48h75v48h75v90h-62v55h-90v-55h-63z"/></g>
+<g fill="#f6ba42"><path d="M60 615h1480v45H60z"/><path d="M95 660h1410v28H95z"/></g>
+<path d="M0 670L1600 605V900H0Z" fill="url(#walk)"/>
+<g stroke="#a96f3b" stroke-width="5" opacity=".7"><path d="M0 740l1600-70M0 825l1600-75M260 680l-30 220M700 655l-10 245M1150 635l20 265"/></g>
+<g transform="translate(80 520)">
+ <path d="M10 200l70-38 55 18 35 55-80 20z" fill="#fff"/><path d="M68 177l70-20 50 37-45 37-75-15z" fill="#0c3474"/>
+ <path d="M55 88l38-35 60 8 32 60-25 92-95-8-25-62z" fill="#f47721" stroke="#0b285a" stroke-width="12"/>
+ <path d="M54 83l12-51 48-32 63 18 34 53-20 30-23-35-47-14-42 44z" fill="#4a261d"/>
+ <ellipse cx="121" cy="69" rx="46" ry="50" fill="#b97843" stroke="#0b285a" stroke-width="10"/>
+ <path d="M80 48l18-38 45-15 42 21 13 28-47-15-41 20z" fill="#4b281f"/>
+ <circle cx="137" cy="68" r="6" fill="#10265b"/><path d="M136 91q20 18 37-3" fill="none" stroke="#7a2b27" stroke-width="7"/>
+ <path d="M65 110L20 160 0 205 28 219l58-60M173 113l45 40 26 40-25 20-56-44" fill="#f47721" stroke="#0b285a" stroke-width="12"/>
+ <path d="M80 185l-15 110-38 80 38 18 73-80 28-112z" fill="#123e94" stroke="#0b285a" stroke-width="12"/>
+ <path d="M150 190l60 80 15 85-42 10-53-79-26-88z" fill="#123e94" stroke="#0b285a" stroke-width="12"/>
+ <path d="M25 365h68l-5 30H4zM180 350h61l18 34h-88z" fill="#fff" stroke="#0b285a" stroke-width="10"/>
+ <path d="M94 124h59v26H94z" fill="#fff"/><text x="123" y="143" text-anchor="middle" fill="#0755c8" font-size="18" font-weight="900">SENAI</text>
+</g>
+<g transform="translate(250 590) scale(.72)">
+ <ellipse cx="95" cy="38" rx="53" ry="53" fill="#d28a59" stroke="#0b285a" stroke-width="11"/>
+ <path d="M45 36q-5-85 75-83 54 12 41 76l-32-31-63 15z" fill="#40251d"/>
+ <path d="M39 90h105l37 120H8z" fill="#f47721" stroke="#0b285a" stroke-width="12"/>
+ <path d="M70 205l-10 130-35 65h65l43-110 12-90zM130 207l42 115 22 70h-63l-49-119z" fill="#153f94" stroke="#0b285a" stroke-width="12"/>
+ <path d="M42 396h56v27H25zM151 390h54v28h-62z" fill="#fff" stroke="#0b285a" stroke-width="9"/>
+ <path d="M15 92L-25 160 5 182 54 130M150 100l50 32 22 52-31 10-48-45" fill="#f47721" stroke="#0b285a" stroke-width="12"/>
+ <path d="M45 8q-26 6-25 45v15h18V45h14zM150 10q28 8 25 43v17h-19V44h-12z" fill="#13c6f3" stroke="#0b285a" stroke-width="9"/>
+</g>
+<rect width="1600" height="900" fill="url(#pixels)"/>
+</svg>
