@@ -19,7 +19,8 @@ export class Game {
     this.distance = Math.max(0, Number(startEnvironment) || 0) * 220; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
     this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0; this.difficultyLevel = 0;
-    this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.hitAnimationTimer = 0; this.cheerAnimationTimer = 0;
+    this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0;
+    this.lastEnvironmentIndex = this.environmentIndex(); this.environmentTransition = 0; this.environmentTransitionName = ''; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.hitAnimationTimer = 0; this.cheerAnimationTimer = 0;
     requestAnimationFrame(this.loop);
   }
   jump() {
@@ -63,6 +64,15 @@ export class Game {
     const baseSpeed = Math.min(9, 6 + this.distance / 700);
     this.speed = Math.min(12, baseSpeed * (turboOn ? 1.55 : 1));
     this.distance += this.speed * .045 * dt;
+    const activeEnvironment = this.environmentIndex();
+    if (activeEnvironment !== this.lastEnvironmentIndex) {
+      const names = ['PÁTIO DO SENAI', 'ADMINISTRAÇÃO', 'ELETRÔNICA', 'INFORMÁTICA', 'TI E REDES', 'HARDWARE', 'LABORATÓRIO'];
+      this.lastEnvironmentIndex = activeEnvironment;
+      this.environmentTransitionName = names[activeEnvironment];
+      this.environmentTransition = 100;
+      this.burst(640, 260, '#7de0ff', 22);
+    }
+    this.environmentTransition = Math.max(0, this.environmentTransition - dt);
     const nextDifficulty = Math.min(5, Math.floor(this.distance / 500));
     if (nextDifficulty !== this.difficultyLevel) {
       this.difficultyLevel = nextDifficulty;
@@ -659,6 +669,21 @@ export class Game {
     const shakeY = this.cameraShake ? (Math.random()-.5)*this.cameraShake*.55 : 0;
     c.translate(shakeX-this.cameraX, shakeY);
     this.drawEnvironment(c);
+    if (this.environmentTransition > 0) {
+      const progress = this.environmentTransition / 100;
+      const alpha = Math.max(0, Math.min(1, progress * 2.2, (1 - progress) * 3.2 + 0.15));
+      c.save();
+      c.globalAlpha = alpha;
+      c.fillStyle = '#10265b'; c.fillRect(0, 150, this.width, 118);
+      c.fillStyle = '#f47721'; c.fillRect(0, 150, this.width, 7);
+      const sweep = ((100 - this.environmentTransition) * 24) % (this.width + 260) - 260;
+      c.globalAlpha = alpha * 0.22; c.fillStyle = '#7de0ff';
+      c.beginPath(); c.moveTo(sweep, 150); c.lineTo(sweep + 170, 150); c.lineTo(sweep + 80, 268); c.lineTo(sweep - 90, 268); c.closePath(); c.fill();
+      c.globalAlpha = alpha; c.textAlign = 'center';
+      c.fillStyle = '#ffd34d'; c.font = 'bold 17px Arial'; c.fillText('PRÓXIMO SETOR', 640, 190);
+      c.fillStyle = '#ffffff'; c.font = 'bold 34px Arial'; c.fillText(this.environmentTransitionName, 640, 235);
+      c.restore();
+    }
     for(const o of this.obstacles){
       if(o.type==='boss'){
         c.save(); c.translate(o.x,this.ground-8);
