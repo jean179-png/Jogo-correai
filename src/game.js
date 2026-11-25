@@ -3,7 +3,7 @@ export class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
     this.leaderSprite = createCharacterSprite('A01');
-    this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06'].map(id => [id, createCharacterSprite(id)]));
+    this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06','A07','A08','A09','A10'].map(id => [id, createCharacterSprite(id)]));
     this.ctx = canvas.getContext('2d');
     this.callbacks = callbacks;
     this.width = 1280; this.height = 720; this.ground = 555;
@@ -526,7 +526,7 @@ export class Game {
   person(x, y, scale, phase, leader = false, reaction = 0, avoidance = 0) {
     const c = this.ctx;
     const variant = Math.abs(Math.floor(phase * 17)) % 10;
-    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 5));
+    const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 9));
     const sprite = leader ? this.leaderSprite : this.characterSprites?.[spriteId];
     const gait = Math.floor((phase * 5) % 6);
     const bob = Math.sin(this.frame * 0.24 + phase) * (this.isJumping ? 1.5 : 2.5);
