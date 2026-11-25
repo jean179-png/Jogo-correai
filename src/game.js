@@ -11,7 +11,7 @@ export class Game {
     this.distance = 0; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
     this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 360; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 110; this.coinTimer = 75; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = 650; this.bossCount = 0; this.difficultyLevel = 0;
-    this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0;
+    this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.hitAnimationTimer = 0; this.cheerAnimationTimer = 0;
     this.loop = this.loop.bind(this);
     this.draw();
   }
@@ -19,7 +19,7 @@ export class Game {
     this.distance = Math.max(0, Number(startEnvironment) || 0) * 220; this.score = 0; this.crowd = 1;
     this.playerY = this.ground; this.velocityY = 0; this.isJumping = false;
     this.frame = 0; this.speed = 6; this.obstacles = []; this.recruits = []; this.coins = []; this.gates = []; this.routeForks = []; this.nextForkDistance = this.distance + 300; this.powerups = []; this.effects = { shield: 0, magnet: 0, turbo: 0, multiplier: 0 }; this.powerTimer = 260; this.coinCombo = 0; this.coinComboTimer = 0; this.particles = []; this.spawnTimer = 65; this.recruitTimer = 95; this.coinTimer = 55; this.gateTimer = 430; this.combo = 0; this.milestones = new Set(); this.nextBossDistance = this.distance + 650; this.bossCount = 0; this.difficultyLevel = 0;
-    this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.obstacleAwareness = 0;
+    this.running = true; this.paused = false; this.lastTime = 0; this.cameraShake = 0; this.cameraX = 0; this.landingPulse = 0; this.crowdReaction = 0; this.obstacleAwareness = 0; this.hitAnimationTimer = 0; this.cheerAnimationTimer = 0;
     requestAnimationFrame(this.loop);
   }
   jump() {
@@ -41,7 +41,9 @@ export class Game {
   }
   update(dt) {
     this.frame += dt;
-    const spriteState = this.isJumping ? (this.velocityY < 0 ? 'jump' : 'fall') : 'run';
+    this.hitAnimationTimer = Math.max(0, this.hitAnimationTimer - dt);
+    this.cheerAnimationTimer = Math.max(0, this.cheerAnimationTimer - dt);
+    const spriteState = this.hitAnimationTimer > 0 ? 'hit' : this.cheerAnimationTimer > 0 ? 'cheer' : this.isJumping ? (this.velocityY < 0 ? 'jump' : 'fall') : 'run';
     this.leaderSprite?.update(dt);
     this.leaderSprite?.setAnimation(spriteState);
     for (const sprite of Object.values(this.characterSprites || {})) { sprite?.update(dt); sprite?.setAnimation(spriteState); }
@@ -172,6 +174,7 @@ export class Game {
       }
       if (r.joining && r.joinT >= 0.92) {
         this.crowd += 1; this.score += 50;
+        this.cheerAnimationTimer = 22;
         this.burst(155, this.ground - 22, '#42d392', 9);
         this.callbacks.onSound?.("recruit");
         this.checkMilestones();
@@ -223,7 +226,7 @@ export class Game {
             this.burst(190,this.ground-45,'#55c8ff',28);
             this.callbacks.onSound?.('success');
           } else {
-            this.burst(190,this.ground-35,'#f47721',14); this.cameraShake = 13; this.crowdReaction = 28; this.callbacks.onSound?.('hit'); this.combo=0;
+            this.hitAnimationTimer = 26; this.burst(190,this.ground-35,'#f47721',14); this.cameraShake = 13; this.crowdReaction = 28; this.callbacks.onSound?.('hit'); this.combo=0;
             this.crowd = Math.max(0, this.crowd - (o.damage || 1));
             this.callbacks.onHit?.(o.damage || 1, this.crowd);
           }
@@ -235,7 +238,7 @@ export class Game {
           if (o.type === 'boss') {
             this.crowd += 5;
             this.score += 250;
-            this.callbacks.onBossDefeated?.(this.crowd);
+            this.cheerAnimationTimer = 60; this.callbacks.onBossDefeated?.(this.crowd);
             this.checkMilestones();
           }
         }
@@ -250,7 +253,7 @@ export class Game {
   checkMilestones() {
     for (const target of [10,20,50,100]) {
       if (this.crowd >= target && !this.milestones.has(target)) {
-        this.milestones.add(target); this.score += target * 10;
+        this.milestones.add(target); this.score += target * 10; this.cheerAnimationTimer = 48;
         this.callbacks.onMilestone?.(target);
         this.burst(205,this.ground-105,'#ffd34d',26);
       }
@@ -508,7 +511,9 @@ export class Game {
     const variant = Math.abs(Math.floor(phase * 17)) % 10;
     const spriteId = leader ? 'A01' : 'A0' + (2 + (variant % 5));
     const sprite = leader ? this.leaderSprite : this.characterSprites?.[spriteId];
-    if (sprite?.draw(c, x - 44 * scale, y - 88 * scale, { scale })) return;
+    const gait = Math.floor((phase * 5) % 6);
+    const bob = Math.sin(this.frame * 0.24 + phase) * (this.isJumping ? 1.5 : 2.5);
+    if (sprite?.draw(c, x - 44 * scale, y - 88 * scale + bob * scale, { scale, frameOffset: gait })) return;
     c.save();
     c.translate(Math.round(x), Math.round(y));
     c.scale(scale, scale);
