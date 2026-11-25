@@ -459,8 +459,9 @@ body{min-height:100svh;min-height:100dvh}
   color:#fff!important;text-shadow:2px 3px 0 #145b0a;
 }
 .jump-button:active{transform:translateY(4px);box-shadow:0 2px 0 #17670c!important}
+
 .menu-overlay{
-  display:grid!important;place-items:center!important;inset:0!important;padding:0!important;
+  display:grid;place-items:center!important;inset:0!important;padding:0!important;
   overflow:hidden!important;background:#061d4d!important;
 }
 .menu-overlay .menu-art{
@@ -814,4 +815,15 @@ button.menu-counter{min-width:48px;cursor:pointer}
 @media(prefers-reduced-motion:reduce){
   .menu-runner{animation:none!important}
   .menu-action{transition:none!important}
+}
+
+
+/* Fundo HD com personagens já integrados à arte — controles ficam em HTML acima */
+.menu-overlay .menu-runners{display:none!important}
+.menu-overlay .menu-background{object-fit:cover;object-position:center;image-rendering:pixelated}
+#overlay:not([style*="display: none"]) ~ #jump,
+#overlay:not([style*="display: none"]) ~ #message{display:none!important}
+@media(max-aspect-ratio:1/1){
+  .menu-overlay .menu-art{width:100vw!important;height:100dvh!important}
+  .menu-background{object-fit:cover;object-position:40% center}
 }
