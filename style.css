@@ -219,3 +219,7 @@ body{min-height:100svh;min-height:100dvh}
 /* Etapa 24 — painel de conquistas */
 .achievement-summary{margin:8px auto 12px!important;padding:9px 12px;max-width:300px;border:1px solid #ffd45c66;border-radius:12px;background:#ffd45c14;color:#ffd45c!important;font-size:12px!important;font-weight:900;letter-spacing:1px}
 .achievement-summary span{color:#fff;font-size:1.15em}
+
+/* Botao COMEÇAR: clique/toque nativo */
+#start{position:relative;z-index:20;display:inline-flex;align-items:center;justify-content:center;min-height:48px;min-width:140px;touch-action:manipulation;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#overlay{pointer-events:auto}#overlay .dialog{pointer-events:auto}
