@@ -2,6 +2,9 @@ import { createCharacterSprite } from './sprite-animation.js';
 export class Game {
   constructor(canvas, callbacks = {}) {
     this.canvas = canvas;
+    this.campusBackground = new Image();
+    this.campusBackground.decoding = 'async';
+    this.campusBackground.src = './assets/cenarios/campus-senaipixel.svg';
     this.leaderSprite = createCharacterSprite('A01');
     this.characterSprites = Object.fromEntries(['A02','A03','A04','A05','A06','A07','A08','A09','A10'].map(id => [id, createCharacterSprite(id)]));
     this.ctx = canvas.getContext('2d');
@@ -296,6 +299,23 @@ export class Game {
     const idx = this.environmentIndex(), t = themes[idx];
     // Fase 1: pátio externo do SENAI, com escola, árvores, grade e calçada.
     if (idx === 0) {
+      if (this.campusBackground?.complete && this.campusBackground.naturalWidth > 0) {
+        c.imageSmoothingEnabled = false;
+        const drift = (this.frame * 0.12) % 32;
+        c.fillStyle = '#3d4b62'; c.fillRect(0, 0, this.width, this.height);
+        c.drawImage(this.campusBackground, -drift, -80, this.width + 32, this.height);
+        // Camada de rua no primeiro plano para alinhar o cenário ao chão da física.
+        c.fillStyle = '#3d4b62'; c.fillRect(0, this.ground, this.width, this.height - this.ground);
+        c.fillStyle = '#f47721'; c.fillRect(0, this.ground, this.width, 6);
+        c.fillStyle = '#f7f7f7';
+        for (let i = 0; i < 9; i++) {
+          const x = ((i * 190 - this.frame * this.speed * .85) % (this.width + 190) + this.width + 190) % (this.width + 190) - 90;
+          c.fillRect(x, 650, 92, 7);
+        }
+        c.fillStyle = '#10265bcc'; c.fillRect(18, 92, 250, 34);
+        c.fillStyle = '#ffffff'; c.font = 'bold 18px Arial'; c.fillText('FASE 1 · PÁTIO SENAI', 30, 115);
+        return;
+      }
       const sky = c.createLinearGradient(0,0,0,500);
       sky.addColorStop(0,'#42a9ed'); sky.addColorStop(1,'#d9f2ff');
       c.fillStyle=sky; c.fillRect(0,0,this.width,this.height);
@@ -670,7 +690,7 @@ export class Game {
   }
 
   draw() {
-    const c = this.ctx; c.clearRect(0,0,this.width,this.height);
+    const c = this.ctx; c.imageSmoothingEnabled = false; c.clearRect(0,0,this.width,this.height);
     c.save();
     const shakeX = this.cameraShake ? (Math.random()-.5)*this.cameraShake : 0;
     const shakeY = this.cameraShake ? (Math.random()-.5)*this.cameraShake*.55 : 0;
