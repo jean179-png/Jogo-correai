@@ -632,9 +632,31 @@ export class Game {
         c.restore();
       }
       else if(o.type==='pit'){
-        c.fillStyle='#111d31';c.fillRect(o.x,this.ground,o.w,165);
-        c.fillStyle='#7d91a3';c.fillRect(o.x,this.ground,o.w,8);
-        c.fillStyle='#263b62';c.fillRect(o.x+8,this.ground+12,o.w-16,8);
+        // Buraco aberto no asfalto: bordas quebradas, profundidade e pedras.
+        c.save();
+        c.translate(o.x,this.ground);
+        c.fillStyle='#202a39';
+        c.beginPath();
+        c.moveTo(0,0); c.lineTo(12,-7); c.lineTo(28,-4); c.lineTo(43,-11);
+        c.lineTo(62,-6); c.lineTo(81,-10); c.lineTo(101,-4); c.lineTo(o.w,0);
+        c.lineTo(o.w-8,20); c.lineTo(12,20); c.closePath(); c.fill();
+        c.fillStyle='#090f1c';
+        c.beginPath(); c.moveTo(10,2); c.lineTo(27,-3); c.lineTo(43,2);
+        c.lineTo(61,-5); c.lineTo(82,1); c.lineTo(o.w-10,3);
+        c.lineTo(o.w-19,15); c.lineTo(17,15); c.closePath(); c.fill();
+        c.fillStyle='#526174';
+        c.fillRect(7,-5,15,4); c.fillRect(45,-8,18,4); c.fillRect(o.w-28,-4,17,4);
+        c.fillStyle='#111827';
+        c.fillRect(26,8,18,5); c.fillRect(69,6,22,6);
+        c.fillStyle='#9aa7b6';
+        c.fillRect(4,-11,12,4); c.fillRect(o.w-19,-8,13,4);
+        c.strokeStyle='#17243a'; c.lineWidth=3;
+        c.beginPath(); c.moveTo(16,-3); c.lineTo(7,-15); c.lineTo(18,-20);
+        c.moveTo(o.w-22,-2); c.lineTo(o.w-10,-15); c.lineTo(o.w-20,-21);
+        c.stroke();
+        c.fillStyle='#f47721'; c.fillRect(o.w/2-17,-29,34,4);
+        c.fillStyle='#ffd34d'; c.fillRect(o.w/2-17,-29,8,4); c.fillRect(o.w/2+9,-29,8,4);
+        c.restore();
       }
       else if(o.type==='barrier'){
         c.fillStyle='#d94c35';c.fillRect(o.x,this.ground-92,o.w,92);
