@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="576" height="288" viewBox="0 0 576 288" shape-rendering="crispEdges">
+<defs>
+ <g id="body">
+  <path fill="#10265b" d="M20 42h12v28H20z"/><path fill="#17457e" d="M22 45h8v20h-8z"/>
+  <path fill="#f47721" d="M31 39h29v31H31z"/><path fill="#d95d13" d="M31 42h5v22h-5z"/>
+  <path fill="#c9875d" d="M49 20h22v23H49z"/><path fill="#f0bd91" d="M54 24h17v14H54z"/>
+  <path fill="#35251f" d="M47 18h7V9h8V5h16v5h7v8h-7v5H55v-4z"/>
+  <path fill="#202638" d="M51 14h5V8h7V4h13v5h7v8H70v-4H58v5h-7z"/>
+  <path fill="#fff" d="M63 27h5v8h-5z"/><path fill="#10265b" d="M65 28h3v6h-3z"/>
+  <path fill="#7c3526" d="M65 39h10v3H65z"/>
+  <path fill="#ffd45c" d="M42 43h6v5h-6z"/>
+ </g>
+ <g id="legsA"><path fill="#102044" d="M34 67h12v13H34z"/><path fill="#102044" d="M49 66h12v15H49z"/><path fill="#17243a" d="M27 77h20v7H27z"/><path fill="#17243a" d="M50 78h19v7H50z"/><path fill="#fff0d8" d="M28 80h12v3H28z"/><path fill="#fff0d8" d="M55 81h10v3H55z"/></g>
+ <g id="legsB"><path fill="#102044" d="M33 66h12v15H33z"/><path fill="#102044" d="M51 66h12v12H51z"/><path fill="#17243a" d="M27 78h17v7H27z"/><path fill="#17243a" d="M55 75h18v7H55z"/><path fill="#fff0d8" d="M29 81h11v3H29z"/><path fill="#fff0d8" d="M61 77h10v3H61z"/></g>
+ <g id="armsA"><path fill="#f47721" d="M31 43h-8v12h8z"/><path fill="#c9875d" d="M20 51h12v8H20z"/><path fill="#f47721" d="M57 43h9v8h-9z"/><path fill="#c9875d" d="M64 45h9v8h-9z"/></g>
+ <g id="armsB"><path fill="#f47721" d="M31 43h-9v8h9z"/><path fill="#c9875d" d="M19 44h10v8H19z"/><path fill="#f47721" d="M56 43h10v12H56z"/><path fill="#c9875d" d="M63 50h10v8H63z"/></g>
+ <g id="runner"><use href="#legsA"/><use href="#body"/><use href="#armsA"/></g>
+ <g id="runner2"><use href="#legsB"/><use href="#body"/><use href="#armsB"/></g>
+ <g id="jump"><use href="#body"/><path fill="#102044" d="M34 67h12v8H34zM49 66h12v8H49z"/><path fill="#17243a" d="M25 71h19v7H25zM56 70h19v7H56z"/><path fill="#f47721" d="M31 42h-9v-9h9zM57 42h9v-9h-9z"/><path fill="#c9875d" d="M20 29h11v9H20zM63 29h11v9H63z"/></g>
+ <g id="cheer"><use href="#body"/><path fill="#102044" d="M34 67h12v16H34zM49 67h12v16H49z"/><path fill="#17243a" d="M29 80h18v6H29zM49 80h19v6H49z"/><path fill="#f47721" d="M31 42h-8V25h8zM57 42h8V25h-8z"/><path fill="#c9875d" d="M20 18h12v10H20zM62 18h12v10H62z"/></g>
+</defs>
+<g transform="translate(0 0)"><use href="#runner"/></g><g transform="translate(96 0)"><use href="#runner2"/></g><g transform="translate(192 0)"><use href="#runner"/></g><g transform="translate(288 0)"><use href="#runner2"/></g><g transform="translate(384 0)"><use href="#runner"/></g><g transform="translate(480 0)"><use href="#runner2"/></g>
+<g transform="translate(0 96)"><use href="#jump"/></g><g transform="translate(96 96)"><use href="#jump" transform="translate(0 -4)"/></g><g transform="translate(192 96)"><use href="#jump" transform="translate(0 2)"/></g><g transform="translate(288 96)"><use href="#jump" transform="translate(0 7)"/></g><g transform="translate(384 96)"><use href="#runner2" transform="translate(0 5)"/></g><g transform="translate(480 96)"><use href="#runner" transform="translate(0 3)"/></g>
+<g transform="translate(0 192)"><use href="#runner"/></g><g transform="translate(96 192)"><use href="#runner2"/></g><g transform="translate(192 192)"><use href="#cheer"/></g><g transform="translate(288 192)"><use href="#cheer" transform="translate(0 -2)"/></g>
+</svg>
