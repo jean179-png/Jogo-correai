@@ -4,6 +4,8 @@ const $ = (s) => document.querySelector(s);
 const canvas = $('#game'), overlay = $('#overlay'), results = $('#results'), quiz = $('#quiz');
 const startButton = $('#start'), jumpButton = $('#jump'), pauseButton = $('#pause');
 const environmentSelect = $('#environment-select');
+const menuPanel = $('#menu-panel'), menuPanelTitle = $('#menu-panel-title'), menuPanelContent = $('#menu-panel-content');
+const menuPanelClose = $('#menu-panel-close'), soundToggle = $('#sound-toggle');
 let questionIndex = 0, questionOpen = false, soundEnabled = true;
 let questionDeck = [];
 const questions = [
@@ -63,8 +65,90 @@ function checkAchievements(stats) {
 }
 const getBest = () => Number(safeStorage.get('ondaAprendizesRecord', '0')) || 0;
 $('#best-score').textContent = getBest().toLocaleString('pt-BR');
+const menuBest = $('#menu-best'), menuStars = $('#menu-stars');
+if (menuBest) menuBest.textContent = getBest().toLocaleString('pt-BR');
+if (menuStars) menuStars.textContent = unlockedAchievements.length + '/' + achievementList.length;
 const achievementCount = $('#achievement-count');
+
 if (achievementCount) achievementCount.textContent = unlockedAchievements.length;
+const sectorNames = ['Pátio do SENAI','Administração','Eletrônica','Informática','TI e Redes','Hardware','Laboratório'];
+function syncSectorButtons() {
+  document.querySelectorAll('.sector-choice').forEach(button => {
+    const selected = Number(button.dataset.env) === Number(environmentSelect.value);
+    button.classList.toggle('is-selected', selected);
+    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
+}
+function showMenuPanel(view) {
+  const best = getBest().toLocaleString('pt-BR');
+  const unlocked = unlockedAchievements.length;
+  const row = (title, description, status = '') => `<div class="menu-panel-row"><div><b>${title}</b><small>${description}</small></div><span class="menu-panel-status">${status}</span></div>`;
+  let content = '';
+  soundToggle.hidden = view !== 'settings';
+  if (view === 'missions') {
+    menuPanelTitle.textContent = 'MISSÕES E SETORES';
+    content = '<div class="menu-panel-list">' + sectorNames.map((name, index) =>
+      `<div class="menu-panel-row"><div><b>${String(index + 1).padStart(2, '0')} · ${name}</b><small>Corrida temática, obstáculos e desafios de informática</small></div><button class="menu-panel-action" style="width:auto;margin:0" data-play-sector="${index}" type="button">JOGAR</button></div>`
+    ).join('') + '</div>';
+  } else if (view === 'achievements') {
+    menuPanelTitle.textContent = 'CONQUISTAS';
+    content = '<p class="menu-panel-note">Desbloqueie conquistas durante as corridas. O progresso fica salvo neste dispositivo.</p><div class="menu-panel-list">' +
+      achievementList.map(a => row(a.label, a.detail, unlockedAchievements.includes(a.id) ? '✓ CONQUISTADA' : '🔒 BLOQUEADA')).join('') +
+      '</div><p class="menu-panel-note"><b>' + unlocked + ' de ' + achievementList.length + '</b> conquistas desbloqueadas.</p>';
+  } else if (view === 'ranking') {
+    menuPanelTitle.textContent = 'RANKING LOCAL';
+    content = row('SEU MELHOR RESULTADO', best + ' pontos registrados neste dispositivo', '🏆 RECORDE') +
+      '<p class="menu-panel-note">Este protótipo guarda o recorde no navegador atual. Um ranking entre turmas e dispositivos exige uma sala online com servidor, que ainda não está conectada.</p>';
+  } else if (view === 'settings') {
+    menuPanelTitle.textContent = 'CONFIGURAÇÕES';
+    content = '<div class="menu-panel-list">' +
+      row('COMPUTADOR', 'Espaço, seta para cima ou W para pular; Esc para pausar.', 'TECLADO') +
+      row('CELULAR / TABLET', 'Toque no botão PULAR ou na pista para saltar.', 'TOQUE') +
+      row('ORIENTAÇÃO', 'Experiência otimizada para tela horizontal; no retrato o menu se reorganiza.', 'RESPONSIVO') +
+      '</div><p class="menu-panel-note">A opção de som pode ser ligada ou desligada no botão abaixo.</p>';
+  } else {
+    menuPanelTitle.textContent = 'PERFIL DO APRENDIZ';
+    content = row('APRENDIZ SENAI', 'Perfil local deste navegador', 'NÍVEL 01') +
+      row('MELHOR PONTUAÇÃO', best + ' pontos', 'RECORDE') +
+      row('CONQUISTAS', unlocked + ' de ' + achievementList.length + ' desbloqueadas', '🏅');
+    content += '<p class="menu-panel-note">O perfil ainda não utiliza login nem sincronização entre dispositivos.</p>';
+  }
+  menuPanelContent.innerHTML = content;
+  menuPanel.hidden = false;
+  menuPanel.setAttribute('data-view', view);
+  menuPanelClose.focus();
+}
+function closeMenuPanel() {
+  menuPanel.hidden = true;
+  soundToggle.hidden = true;
+}
+document.querySelectorAll('[data-menu]').forEach(button => {
+  button.addEventListener('click', () => showMenuPanel(button.dataset.menu));
+});
+document.querySelectorAll('.sector-choice').forEach(button => {
+  button.addEventListener('click', () => {
+    environmentSelect.value = String(button.dataset.env);
+    syncSectorButtons();
+    const message = $('#message');
+    message.textContent = 'SETOR INICIAL: ' + sectorNames[Number(button.dataset.env)].toUpperCase();
+    message.classList.add('show');
+    window.setTimeout(() => message.classList.remove('show'), 1500);
+  });
+});
+menuPanelContent.addEventListener('click', event => {
+  const button = event.target.closest('[data-play-sector]');
+  if (!button) return;
+  environmentSelect.value = button.dataset.playSector;
+  syncSectorButtons();
+  closeMenuPanel();
+  beginGame();
+});
+menuPanelClose.addEventListener('click', closeMenuPanel);
+menuPanel.addEventListener('click', event => {
+  if (event.target === menuPanel) closeMenuPanel();
+});
+syncSectorButtons();
+
 
 function sound(kind) {
   if (!soundEnabled) return;
@@ -195,6 +279,9 @@ function showResults() {
   $('#result-summary').textContent = 'Missão concluída! Confira seu desempenho e tente superar sua marca.';
   $('#record-message').textContent = isRecord ? '🏆 NOVO RECORDE! Parabéns!' : `Seu melhor resultado: ${Math.max(previous,score).toLocaleString('pt-BR')} pontos`;
   $('#best-score').textContent = Math.max(previous,score).toLocaleString('pt-BR');
+  const menuBest = $('#menu-best'), menuStars = $('#menu-stars');
+  if (menuBest) menuBest.textContent = Math.max(previous,score).toLocaleString('pt-BR');
+  if (menuStars) menuStars.textContent = unlockedAchievements.length + '/' + achievementList.length;
   results.style.display = 'grid';
 }
 
@@ -221,10 +308,10 @@ startButton.style.touchAction = 'manipulation';
 window.__ondaStart = activateStart;
 startButton.addEventListener('click', activateStart);
 $('#again').addEventListener('click', beginGame);
-$('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; });
+$('#back-menu').addEventListener('click', () => { results.style.display = 'none'; overlay.style.display = 'grid'; syncSectorButtons(); });
 $('#sound-toggle').addEventListener('click', () => {
   soundEnabled = !soundEnabled;
-  $('#sound-toggle').textContent = soundEnabled ? '🔊 SOM: LIGADO' : '🔇 SOM: DESLIGADO';
+  soundToggle.textContent = soundEnabled ? '🔊 SOM: LIGADO' : '🔇 SOM: DESLIGADO';
   if (soundEnabled) sound('success');
 });
 const jumpStart = (event) => {
@@ -239,6 +326,6 @@ canvas.addEventListener('pointerdown', (event) => {
 
 window.addEventListener('keydown', (event) => {
   if (['Space','ArrowUp','KeyW'].includes(event.code)) { event.preventDefault(); if (!event.repeat) game.jump(); }
-  if (event.code === 'Escape') game.togglePause();
+  if (event.code === 'Escape') { if (!menuPanel.hidden) closeMenuPanel(); else game.togglePause(); }
 });
 pauseButton.addEventListener('click', () => game.togglePause());
