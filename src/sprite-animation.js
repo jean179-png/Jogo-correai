@@ -70,27 +70,29 @@ export class SpriteAnimator {
 }
 
 /**
- * Seis personagens em spritesheets SVG com fundo transparente.
+ * Dez personagens em PNG, cada um com faixa horizontal de 20 quadros
+ * (72x84 px por quadro, 1440x84 px no total).
+ * Os quadros 0-5 cobrem corrida, 6-8 salto, 9-11 repouso,
+ * 12-13 comemoração, 16-18 reação/impacto e 19 queda.
  */
-export const CHARACTER_SPRITES = {
-  A01: {
-    src: './assets/personagens/spritesheet-A01.svg',
-    frameWidth: 96,
-    frameHeight: 96,
-    scale: 1,
-    animations: {
-      run:   { frames: [0, 1, 2, 3, 4, 5], columns: 6, frameDuration: 5 },
-      jump:  { frames: [6, 7, 8, 9], columns: 6, frameDuration: 7 },
-      fall:  { frames: [10, 11], columns: 6, frameDuration: 7 },
-      hit:   { frames: [10, 11], columns: 6, frameDuration: 4 },
-      idle:  { frames: [12, 13], columns: 6, frameDuration: 12 },
-      cheer: { frames: [14, 15], columns: 6, frameDuration: 9 }
-    }
-  }
+const characterFrames = {
+  run:   { frames: [1, 2, 3, 4, 5], columns: 20, frameDuration: 4 },
+  jump:  { frames: [6, 7, 8], columns: 20, frameDuration: 6 },
+  fall:  { frames: [19], columns: 20, frameDuration: 8 },
+  hit:   { frames: [16, 17, 18], columns: 20, frameDuration: 5 },
+  idle:  { frames: [0, 9, 10, 11], columns: 20, frameDuration: 10 },
+  cheer: { frames: [12, 13], columns: 20, frameDuration: 8 }
 };
 
-for (const id of ['A02','A03','A04','A05','A06','A07','A08','A09','A10']) {
-  CHARACTER_SPRITES[id] = { ...CHARACTER_SPRITES.A01, src: './assets/personagens/spritesheet-' + id + '.svg' };
+export const CHARACTER_SPRITES = {};
+for (const id of ['A01','A02','A03','A04','A05','A06','A07','A08','A09','A10']) {
+  CHARACTER_SPRITES[id] = {
+    src: './assets/personagens/aprendiz-' + id + '.png',
+    frameWidth: 72,
+    frameHeight: 84,
+    scale: 1,
+    animations: characterFrames
+  };
 }
 
 export function createCharacterSprite(id = 'A01') {
