@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#10265B">
   <meta name="description" content="Onda de Aprendizes — jogo educativo de corrida e desafios de informática do SENAI.">
   <title>Onda de Aprendizes — SENAI | Etapa 24</title>
-  <link rel="stylesheet" href="./style.css?v=29">
+  <link rel="stylesheet" href="./style.css?v=30">
 
 </head>
 <body>
@@ -31,7 +31,7 @@
         <p class="record-line">MELHOR PONTUAÇÃO: <span id="best-score">0</span></p>
         <p id="achievement-summary" class="achievement-summary">🏅 CONQUISTAS: <span id="achievement-count">0</span> / 7</p>
         <button id="sound-toggle" class="secondary">🔊 SOM: LIGADO</button>
-        <button id="start" class="primary" type="button">COMEÇAR</button>
+        <button id="start" class="primary" type="button" onclick="if(window.__ondaStart){window.__ondaStart(event)}else{const m=document.getElementById('message');m.textContent='ERRO: o módulo do jogo não carregou. Recarregue a página.';m.classList.add('show')}">COMEÇAR</button>
       </div>
     </section>
 
@@ -51,6 +51,6 @@
   <div id="rotate-device" role="status" aria-live="polite">
     <div class="rotate-card"><span class="rotate-icon">📱↻</span><h2>Gire o celular</h2><p>O Onda de Aprendizes foi desenvolvido para jogar na horizontal. Gire o aparelho para aproveitar a pista completa.</p></div>
   </div>
-  <script type="module" src="./src/main.js?v=29"></script>
+  <script type="module" src="./src/main.js?v=30"></script>
 </body>
 </html>
